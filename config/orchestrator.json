@@ -1,0 +1,35 @@
+{
+  "orchestrator": {
+    "max_queue_size": 10000,
+    "max_message_history": 1000,
+    "agent_manager": {
+      "min_agents": 3,
+      "max_agents": 20,
+      "base_agent_port": 50052
+    },
+    "grpc_server": {
+      "port": 50051,
+      "max_workers": 10
+    },
+    "auto_scaling": {
+      "enabled": true,
+      "scale_up_threshold": 0.8,
+      "scale_down_threshold": 0.3,
+      "check_interval": 30
+    },
+    "health_monitoring": {
+      "enabled": true,
+      "check_interval": 10,
+      "agent_timeout": 30
+    },
+    "performance": {
+      "task_timeout": 300,
+      "max_concurrent_tasks_per_agent": 5,
+      "task_retry_attempts": 3
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}

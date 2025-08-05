@@ -1,0 +1,28 @@
+{
+  "mcp": {
+    "mcp-python-system": {
+      "type": "local",
+      "command": ["python", "/path/to/mcp-python/distributed_server.py", "--config", "/path/to/config.json"],
+      "enabled": true,
+      "env": {
+        "EXECUTION_MODE": "host_agent",
+        "HOST_AGENT_URL": "http://localhost:8001",
+        "HOST_AGENT_TOKEN": "your-secure-token-here",
+        "LOG_LEVEL": "INFO",
+        "PYTHONPATH": "/path/to/mcp-python"
+      },
+      "args": []
+    },
+    "mcp-python-native": {
+      "type": "local",
+      "command": ["python", "/path/to/mcp-python/distributed_server.py"],
+      "enabled": false,
+      "env": {
+        "EXECUTION_MODE": "native",
+        "EXECUTION_WORKING_DIR": "/workspace",
+        "LOG_LEVEL": "DEBUG"
+      },
+      "args": ["--config", "config.native.json"]
+    }
+  }
+}

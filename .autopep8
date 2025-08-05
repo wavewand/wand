@@ -1,0 +1,39 @@
+[autopep8]
+# Configuration file for autopep8
+# This file configures autopep8 settings for the Wand project
+
+# Maximum line length (PEP 8 recommends 79, but 120 is common for modern displays)
+max_line_length = 120
+
+# Number of spaces per indentation level
+indent_size = 4
+
+# Aggressiveness level (0-2, higher = more aggressive changes)
+# Using 2 for maximum code standardization
+aggressive = 2
+
+# Errors to ignore
+# E501: Line too long (handled by max_line_length)
+# W503: Line break before binary operator (PEP 8 now recommends line break before operator)
+# E203: Whitespace before ':' (conflicts with black formatter)
+ignore = E501,W503,E203
+
+# Enable experimental fixes (use with caution)
+experimental = False
+
+# Don't create backup files
+in-place = True
+
+# Exclude paths (directories and files to skip)
+exclude = .git,__pycache__,venv,.venv,migrations,generated,protos,*.egg-info,build,dist
+
+# Additional pep8 passes
+# More passes = more thorough formatting but slower
+pep8_passes = 2000
+
+# Hang closing brackets on the same line
+hang_closing = False
+
+# Select specific errors to fix (if not specified, all errors are fixed)
+# Uncomment and modify to be more selective:
+# select = E101,E111,E113,E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E133,E201,E202,E203,E211,E221,E222,E223,E224,E225,E226,E227,E228,E231,E241,E242,E251,E252,E261,E262,E265,E266,E271,E272,E273,E274,E301,E302,E303,E304,E305,E306,E401,E402,E501,E502,E701,E702,E703,E704,E711,E712,E713,E714,E721,E722,E731,E901,E902,W191,W291,W292,W293,W391,W503,W601,W602,W603,W604,W605,W690

@@ -1,0 +1,62 @@
+FROM python:3.11-slim
+
+# Install system dependencies for privileged execution
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    procps \
+    psmisc \
+    net-tools \
+    htop \
+    vim \
+    nano \
+    tree \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional dependencies for MCP-Python
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    psutil \
+    paramiko \
+    docker \
+    pydantic \
+    pytest \
+    httpx \
+    mcp \
+    watchdog
+
+# Copy application code
+COPY . .
+
+# Create workspace directory that will be mounted
+RUN mkdir -p /workspace
+
+# Set environment variables for privileged mode
+ENV PYTHONPATH=/app
+ENV EXECUTION_MODE=privileged
+ENV WORKING_DIRECTORY=/workspace
+ENV LOG_LEVEL=INFO
+ENV HOST=0.0.0.0
+ENV PORT=8000
+
+# Expose port for MCP server
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the MCP-Python distributed server directly
+CMD ["python", "distributed_server.py", "--config", "config.privileged.json"]

@@ -1,11 +1,15 @@
 {
   "mcpServers": {
-    "example-python": {
-      "command": "python",
-      "args": ["/path/to/mcp-python/server.py"],
+    "mcp-automation-api": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
       "env": {
-        "PYTHONPATH": "/path/to/mcp-python"
+        "MCP_FETCH_BASE_URL": "http://localhost:8000/mcp"
       }
     }
-  }
+  },
+  "allowedTools": [
+    "mcp__mcp-automation-api__*"
+  ],
+  "permissionMode": "acceptEdits"
 }

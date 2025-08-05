@@ -1,0 +1,113 @@
+# Pre-commit hooks for Wand project
+# Install: pip install pre-commit
+# Setup: pre-commit install
+# Manual run: pre-commit run --all-files
+
+repos:
+  # Black - The uncompromising Python code formatter (primary formatter)
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        language_version: python3
+        args: ['--line-length=120', '--skip-string-normalization']
+        exclude: |
+          (?x)^(
+            .*\.egg-info/.*|
+            .*migrations/.*|
+            .*__pycache__/.*|
+            .*\.git/.*|
+            .*\.venv/.*|
+            .*venv/.*|
+            .*generated/.*|
+            .*protos/.*
+          )$
+
+  # isort - Sort imports
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=120']
+        exclude: |
+          (?x)^(
+            .*\.egg-info/.*|
+            .*migrations/.*|
+            .*__pycache__/.*|
+            .*\.git/.*|
+            .*\.venv/.*|
+            .*venv/.*|
+            .*generated/.*|
+            .*protos/.*
+          )$
+
+  # Flake8 - Style guide enforcement
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        args: [
+          '--max-line-length=120',
+          '--ignore=E203,E501,W503,F401,F841,F811,F821,F541,E712,F403,F405,F402',  # Various import and formatting issues (existing codebase)
+          '--exclude=.git,__pycache__,venv,.venv,migrations,generated,protos'
+        ]
+        exclude: |
+          (?x)^(
+            .*generated/.*|
+            .*protos/.*|
+            .*migrations/.*
+          )$
+
+  # Check for trailing whitespace
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: |
+          (?x)^(
+            .*docker-compose.*\.yml|
+            .*deployment/.*\.yaml
+          )$
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-json
+        exclude: |
+          (?x)^(
+            .*\.vscode/.*|
+            .*generated/.*
+          )$
+      - id: check-merge-conflict
+      - id: check-ast  # Check Python AST is valid
+      - id: debug-statements  # Check for debugger imports and breakpoints
+
+  # Security checks (optional - uncomment to enable)
+  # - repo: https://github.com/PyCQA/bandit
+  #   rev: 1.7.5
+  #   hooks:
+  #     - id: bandit
+  #       args: ['-ll', '--skip=B101,B601,B324,B104,B113,B108']  # Skip various security warnings
+  #       exclude: |
+  #         (?x)^(
+  #           .*test.*\.py|
+  #           .*tests/.*|
+  #           .*migrations/.*
+  #         )$
+
+  # Type checking with mypy (optional - can be slow on large codebases)
+  # Uncomment to enable:
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.6.0
+  #   hooks:
+  #     - id: mypy
+  #       args: ['--ignore-missing-imports', '--no-strict-optional']
+  #       additional_dependencies: [types-requests, types-PyYAML]
+  #       exclude: |
+  #         (?x)^(
+  #           .*test.*\.py|
+  #           .*tests/.*|
+  #           .*migrations/.*|
+  #           .*generated/.*|
+  #           .*protos/.*
+  #         )$

@@ -2,10 +2,11 @@
 Integration configurations for distributed MCP server
 """
 
-import os
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
 import json
+import os
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
+
 
 @dataclass
 class SlackConfig:
@@ -13,7 +14,8 @@ class SlackConfig:
     app_token: str = os.getenv("SLACK_APP_TOKEN", "")
     default_channel: str = "#dev-updates"
     enable_threads: bool = True
-    
+
+
 @dataclass
 class GitConfig:
     github_token: str = os.getenv("GITHUB_TOKEN", "")
@@ -22,21 +24,24 @@ class GitConfig:
     auto_commit: bool = False
     commit_author: str = "MCP Agent"
     commit_email: str = "mcp@example.com"
-    
+
+
 @dataclass
 class JenkinsConfig:
     url: str = os.getenv("JENKINS_URL", "https://jenkins.example.com")
     username: str = os.getenv("JENKINS_USER", "")
     token: str = os.getenv("JENKINS_TOKEN", "")
     default_pipeline: str = "ci-cd"
-    timeout: int = 300  # seconds
-    
+    timeout: int = 43200  # 12 hours
+
+
 @dataclass
 class YouTrackConfig:
     url: str = os.getenv("YOUTRACK_URL", "https://youtrack.example.com")
     token: str = os.getenv("YOUTRACK_TOKEN", "")
     default_project: str = "DEV"
-    
+
+
 @dataclass
 class PostgresConfig:
     host: str = os.getenv("POSTGRES_HOST", "localhost")
@@ -46,14 +51,15 @@ class PostgresConfig:
     default_database: str = os.getenv("POSTGRES_DB", "production")
     ssl_mode: str = "require"
     pool_size: int = 10
-    
+
+
 @dataclass
 class AWSConfig:
     access_key_id: str = os.getenv("AWS_ACCESS_KEY_ID", "")
     secret_access_key: str = os.getenv("AWS_SECRET_ACCESS_KEY", "")
     region: str = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
     services: Dict[str, Dict[str, Any]] = None
-    
+
     def __post_init__(self):
         if self.services is None:
             self.services = {
@@ -62,30 +68,28 @@ class AWSConfig:
                 "lambda": {"enabled": True},
                 "rds": {"enabled": True},
                 "ecs": {"enabled": True},
-                "cloudformation": {"enabled": True}
+                "cloudformation": {"enabled": True},
             }
-            
+
+
 @dataclass
 class BambuConfig:
     api_key: str = os.getenv("BAMBU_API_KEY", "")
     cloud_url: str = "https://api.bambulab.com"
     printers: Dict[str, Dict[str, Any]] = None
-    
+
     def __post_init__(self):
         if self.printers is None:
             self.printers = {
                 "X1-Carbon-01": {
                     "ip": "192.168.1.100",
                     "access_code": os.getenv("BAMBU_X1_CODE", ""),
-                    "model": "X1 Carbon"
+                    "model": "X1 Carbon",
                 },
-                "P1S-01": {
-                    "ip": "192.168.1.101",
-                    "access_code": os.getenv("BAMBU_P1S_CODE", ""),
-                    "model": "P1S"
-                }
+                "P1S-01": {"ip": "192.168.1.101", "access_code": os.getenv("BAMBU_P1S_CODE", ""), "model": "P1S"},
             }
-            
+
+
 @dataclass
 class WebConfig:
     search_api_key: str = os.getenv("SEARCH_API_KEY", "")
@@ -93,26 +97,22 @@ class WebConfig:
     proxy: Optional[str] = os.getenv("HTTP_PROXY", None)
     timeout: int = 30
     max_results: int = 10
-    
+
+
 @dataclass
 class APIConfig:
     default_timeout: int = 30
     max_retries: int = 3
     rate_limit: Dict[str, int] = None  # requests per minute per service
-    
+
     def __post_init__(self):
         if self.rate_limit is None:
-            self.rate_limit = {
-                "default": 60,
-                "openai": 50,
-                "anthropic": 40,
-                "github": 100,
-                "aws": 200
-            }
+            self.rate_limit = {"default": 60, "openai": 50, "anthropic": 40, "github": 100, "aws": 200}
+
 
 class IntegrationsManager:
     """Manages all integration configurations"""
-    
+
     def __init__(self):
         self.slack = SlackConfig()
         self.git = GitConfig()
@@ -123,7 +123,7 @@ class IntegrationsManager:
         self.bambu = BambuConfig()
         self.web = WebConfig()
         self.api = APIConfig()
-        
+
     def validate_config(self) -> Dict[str, bool]:
         """Validate that required configurations are present"""
         validations = {
@@ -135,58 +135,49 @@ class IntegrationsManager:
             "aws": bool(self.aws.access_key_id and self.aws.secret_access_key),
             "bambu": bool(self.bambu.api_key),
             "web": True,  # Web search can work without API key
-            "api": True   # Generic API calls always available
+            "api": True,  # Generic API calls always available
         }
         return validations
-        
+
     def get_config_summary(self) -> Dict[str, Any]:
         """Get a summary of all configurations (without sensitive data)"""
         return {
-            "slack": {
-                "configured": bool(self.slack.token),
-                "default_channel": self.slack.default_channel
-            },
+            "slack": {"configured": bool(self.slack.token), "default_channel": self.slack.default_channel},
             "git": {
                 "github_configured": bool(self.git.github_token),
                 "gitlab_configured": bool(self.git.gitlab_token),
-                "default_branch": self.git.default_branch
+                "default_branch": self.git.default_branch,
             },
             "jenkins": {
                 "configured": bool(self.jenkins.token),
                 "url": self.jenkins.url,
-                "default_pipeline": self.jenkins.default_pipeline
+                "default_pipeline": self.jenkins.default_pipeline,
             },
             "youtrack": {
                 "configured": bool(self.youtrack.token),
                 "url": self.youtrack.url,
-                "default_project": self.youtrack.default_project
+                "default_project": self.youtrack.default_project,
             },
             "postgres": {
                 "configured": bool(self.postgres.password),
                 "host": self.postgres.host,
-                "database": self.postgres.default_database
+                "database": self.postgres.default_database,
             },
             "aws": {
                 "configured": bool(self.aws.access_key_id),
                 "region": self.aws.region,
-                "enabled_services": list(self.aws.services.keys())
+                "enabled_services": list(self.aws.services.keys()),
             },
-            "bambu": {
-                "configured": bool(self.bambu.api_key),
-                "printers": list(self.bambu.printers.keys())
-            },
-            "web": {
-                "search_engine": self.web.search_engine,
-                "has_api_key": bool(self.web.search_api_key)
-            }
+            "bambu": {"configured": bool(self.bambu.api_key), "printers": list(self.bambu.printers.keys())},
+            "web": {"search_engine": self.web.search_engine, "has_api_key": bool(self.web.search_api_key)},
         }
-        
+
     def save_config(self, filepath: str = "integrations.json"):
         """Save configuration to file (excluding sensitive data)"""
         config = self.get_config_summary()
         with open(filepath, 'w') as f:
             json.dump(config, f, indent=2)
-            
+
     def load_env_file(self, filepath: str = ".env"):
         """Load environment variables from a file"""
         if os.path.exists(filepath):
@@ -195,6 +186,7 @@ class IntegrationsManager:
                     if line.strip() and not line.startswith('#'):
                         key, value = line.strip().split('=', 1)
                         os.environ[key] = value
+
 
 # Global instance
 integrations = IntegrationsManager()

@@ -1,0 +1,58 @@
+services:
+  # 🪄 Wand API Server - Privileged Mode for Development
+  wand-api:
+    image: wand-api-privileged:latest
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile
+      target: development
+    container_name: wand-api
+    privileged: true
+    network_mode: host
+    pid: host
+    ports:
+      - "8000:8000"  # REST API
+      - "9100:9100"  # Metrics
+    volumes:
+      # Host filesystem access for system commands
+      - /:/host:rw
+      - /workspace:/workspace:rw
+      - /tmp:/tmp:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      # Application data and config (mounted as volumes)
+      - ./config:/app/config:rw
+      - ./logs:/app/logs:rw
+      - ./data:/app/data:rw
+
+      # Source code for development
+      - .:/app:rw
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - DEBUG=true
+      - ENVIRONMENT=development
+    working_dir: /app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    command: >
+      sh -c "
+        echo '🪄 Starting Wand API Server in Privileged Mode...' &&
+        echo '⚠️  WARNING: Running in privileged mode - for development only!' &&
+        mkdir -p /app/logs /app/data /workspace &&
+        chown -R root:root /workspace &&
+        chmod 755 /workspace &&
+        python -m uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+# Create workspace directory on host if it doesn't exist
+volumes:
+  wand_data:
+    driver: local
+  wand_logs:
+    driver: local

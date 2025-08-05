@@ -1,0 +1,66 @@
+services:
+  # 🪄 Wand API Server - Workspace Mount Mode
+  wand-api:
+    image: wand-api:latest
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile
+      target: development
+    container_name: wand-api
+    ports:
+      - "8000:8000"  # REST API
+      - "9100:9100"  # Metrics
+    volumes:
+      # Mount specified workspace directory
+      - ${WORKSPACE_PATH:-/Users/david/workspace}:/workspace:rw
+
+      # Mount system binaries for command execution
+      - /usr/bin:/host/usr/bin:ro
+      - /bin:/host/bin:ro
+      - /usr/local/bin:/host/usr/local/bin:ro
+
+      # Mount Docker socket for docker commands
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # Application data and config (mounted as volumes)
+      - ./config:/app/config:rw
+      - ./logs:/app/logs:rw
+      - ./data:/app/data:rw
+
+      # Source code for development
+      - .:/app:rw
+
+      # Temporary directory
+      - /tmp:/tmp:rw
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - WORKSPACE_PATH=${WORKSPACE_PATH:-/Users/david/workspace}
+      - PATH=/host/usr/local/bin:/host/usr/bin:/host/bin:/usr/local/bin:/usr/bin:/bin
+    working_dir: /app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    command: >
+      sh -c "
+        echo '🪄 Starting Wand API Server in NON-PRIVILEGED Workspace Mode...' &&
+        echo '📁 Workspace: ${WORKSPACE_PATH:-/Users/david/workspace}' &&
+        mkdir -p /app/logs /app/data &&
+        if [ ! -d '/workspace' ]; then
+          echo '❌ Workspace directory not mounted properly' && exit 1;
+        fi &&
+        ls -la /workspace &&
+        python -m uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+volumes:
+  wand_data:
+    driver: local
+  wand_logs:
+    driver: local

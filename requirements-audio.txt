@@ -1,0 +1,63 @@
+# 🎵 Wand MCP Server - Audio & Multimedia Requirements
+# Optional dependencies for audio and multimedia processing
+
+# ============================================================================
+# MULTIMEDIA DEPENDENCIES
+# ============================================================================
+# FFmpeg processing
+ffmpeg-python>=0.2.0
+
+# OpenCV computer vision
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+imageio>=2.31.0
+
+# ============================================================================
+# AUDIO PROCESSING
+# ============================================================================
+# Audio input/output (requires system audio libraries)
+pyaudio>=0.2.11
+
+# Audio analysis
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Speech recognition
+openai-whisper>=20231117
+speechrecognition>=3.10.0
+
+# Text-to-speech
+pyttsx3>=2.90
+gTTS>=2.4.0
+
+# ============================================================================
+# IMAGE PROCESSING
+# ============================================================================
+qrcode[pil]>=7.4.0
+python-barcode[images]>=0.15.0
+pytesseract>=0.3.10
+matplotlib>=3.5.0
+seaborn>=0.12.0
+plotly>=5.0.0
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+# These dependencies require system libraries:
+#
+# For PyAudio on Ubuntu/Debian:
+#   sudo apt-get install portaudio19-dev python3-pyaudio
+#
+# For PyAudio on macOS:
+#   brew install portaudio
+#
+# For OpenCV on Ubuntu/Debian:
+#   sudo apt-get install python3-opencv
+#
+# For Tesseract OCR:
+#   Ubuntu/Debian: sudo apt-get install tesseract-ocr
+#   macOS: brew install tesseract
+#
+# Install with: pip install -r requirements-audio.txt

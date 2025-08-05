@@ -1,0 +1,819 @@
+openapi: 3.0.3
+info:
+  title: Model Context Protocol (MCP) HTTP API
+  description: |
+    HTTP API specification for Model Context Protocol servers supporting Claude Code and OpenCode integrations.
+
+    This API implements the MCP specification version 2025-06-18 using Streamable HTTP transport with optional Server-Sent Events (SSE).
+
+    Compliant with Model Context Protocol 2025-06-18 specification and backwards compatible with 2024-11-05.
+
+    The protocol uses JSON-RPC 2.0 as the underlying message format and supports tools, resources, and prompts as core capabilities.
+  version: 2025-06-18
+  contact:
+    name: MCP HTTP API
+    url: https://modelcontextprotocol.io
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.example.com
+    description: Production MCP server
+  - url: http://localhost:8000
+    description: Local development server
+
+security:
+  - bearerAuth: []
+  - oAuth2: ['read', 'write']
+  - apiKey: []
+
+paths:
+  /mcp:
+    post:
+      summary: Send JSON-RPC message to MCP server
+      description: |
+        Primary endpoint for client-to-server JSON-RPC communication. Supports all MCP methods including tools, resources, and prompts.
+      parameters:
+        - $ref: '#/components/parameters/ProtocolVersion'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/Origin'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonRpcRequest'
+            examples:
+              initialize:
+                summary: Initialize MCP connection
+                value:
+                  jsonrpc: "2.0"
+                  id: 1
+                  method: "initialize"
+                  params:
+                    protocolVersion: "2025-06-18"
+                    capabilities:
+                      roots:
+                        listChanged: true
+                    clientInfo:
+                      name: "example-client"
+                      version: "1.0.0"
+              tools_list:
+                summary: List available tools
+                value:
+                  jsonrpc: "2.0"
+                  id: 2
+                  method: "tools/list"
+                  params: {}
+              tools_call:
+                summary: Call a tool
+                value:
+                  jsonrpc: "2.0"
+                  id: 3
+                  method: "tools/call"
+                  params:
+                    name: "get_weather"
+                    arguments:
+                      location: "San Francisco"
+              resources_list:
+                summary: List available resources
+                value:
+                  jsonrpc: "2.0"
+                  id: 4
+                  method: "resources/list"
+                  params: {}
+              resources_read:
+                summary: Read a resource
+                value:
+                  jsonrpc: "2.0"
+                  id: 5
+                  method: "resources/read"
+                  params:
+                    uri: "file://documents/readme.md"
+      responses:
+        '200':
+          description: Successful JSON-RPC response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcResponse'
+              examples:
+                tools_list_response:
+                  summary: Tools list response
+                  value:
+                    jsonrpc: "2.0"
+                    id: 1
+                    result:
+                      tools:
+                        - name: "get_weather"
+                          description: "Get current weather for a location"
+                          inputSchema:
+                            type: "object"
+                            properties:
+                              location:
+                                type: "string"
+                                description: "City name"
+                            required: ["location"]
+                tools_call_response:
+                  summary: Tool call response
+                  value:
+                    jsonrpc: "2.0"
+                    id: 2
+                    result:
+                      content:
+                        - type: "text"
+                          text: "Current weather in San Francisco: 72°F, sunny"
+                      isError: false
+            text/event-stream:
+              schema:
+                type: string
+                format: sse
+              example: |
+                data: {"jsonrpc": "2.0", "id": 1, "result": {"tools": []}}
+
+        '202':
+          description: Notification or response accepted
+        '400':
+          description: Bad request - Invalid JSON-RPC
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcError'
+              example:
+                jsonrpc: "2.0"
+                id: null
+                error:
+                  code: -32700
+                  message: "Parse error"
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcError'
+        '404':
+          description: Method not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcError'
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                error:
+                  code: -32601
+                  message: "Method not found"
+                  data:
+                    method: "invalid/method"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcError'
+
+    get:
+      summary: Open Server-Sent Events stream
+      description: |
+        Opens an SSE connection for server-to-client communication. Optional endpoint for receiving server-initiated messages.
+      parameters:
+        - $ref: '#/components/parameters/ProtocolVersion'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/LastEventId'
+        - $ref: '#/components/parameters/Origin'
+      responses:
+        '200':
+          description: SSE stream opened successfully
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                format: sse
+              example: |
+                id: event-123
+                event: message
+                data: {"jsonrpc": "2.0", "method": "notifications/progress", "params": {"progress": 0.5}}
+
+                id: event-124
+                event: message
+                data: {"jsonrpc": "2.0", "id": 1, "result": {"status": "completed"}}
+
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+    delete:
+      summary: Terminate session
+      description: |
+        Explicitly terminate an MCP session and clean up resources.
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Session terminated successfully
+        '404':
+          description: Session not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication
+
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.1 authentication with Resource Indicators (RFC 8707) - Required for remote MCP servers
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth/authorize
+          tokenUrl: /oauth/token
+          scopes:
+            read: Read access to resources
+            write: Write access and tool execution
+            admin: Administrative access
+
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key authentication
+
+  parameters:
+    ProtocolVersion:
+      name: MCP-Protocol-Version
+      in: header
+      required: false
+      description: MCP protocol version (defaults to previous version if not specified)
+      schema:
+        type: string
+        default: "2025-06-18"
+        enum: ["2024-11-05", "2025-03-26", "2025-06-18"]
+
+    SessionId:
+      name: Mcp-Session-Id
+      in: header
+      required: false
+      description: Session identifier for session management
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9\-_]+$'
+
+    LastEventId:
+      name: Last-Event-ID
+      in: header
+      required: false
+      description: Last received event ID for SSE stream resumption
+      schema:
+        type: string
+
+    Origin:
+      name: Origin
+      in: header
+      required: false
+      description: Request origin (required for security validation when accessing from browsers)
+      schema:
+        type: string
+        format: uri
+
+  schemas:
+    JsonRpcRequest:
+      type: object
+      required: [jsonrpc, method]
+      properties:
+        jsonrpc:
+          type: string
+          enum: ["2.0"]
+          description: JSON-RPC version
+        id:
+          oneOf:
+            - type: string
+            - type: number
+            - type: null
+          description: Request identifier (omit for notifications)
+        method:
+          type: string
+          description: Method name
+          enum:
+            - "initialize"
+            - "notifications/initialized"
+            - "ping"
+            - "tools/list"
+            - "tools/call"
+            - "resources/list"
+            - "resources/read"
+            - "resources/subscribe"
+            - "resources/unsubscribe"
+            - "resources/templates/list"
+            - "prompts/list"
+            - "prompts/get"
+            - "logging/setLevel"
+            - "completion/complete"
+            - "sampling/createMessage"
+            - "roots/list"
+        params:
+          type: object
+          description: Method parameters
+      example:
+        jsonrpc: "2.0"
+        id: 1
+        method: "tools/list"
+        params: {}
+
+    JsonRpcResponse:
+      type: object
+      required: [jsonrpc, id]
+      properties:
+        jsonrpc:
+          type: string
+          enum: ["2.0"]
+        id:
+          oneOf:
+            - type: string
+            - type: number
+            - type: null
+        result:
+          description: Method result (present on success)
+          oneOf:
+            - type: object
+            - type: array
+            - type: string
+            - type: number
+            - type: boolean
+            - type: null
+        error:
+          $ref: '#/components/schemas/JsonRpcErrorObject'
+      examples:
+        initialize_response:
+          summary: Initialize response
+          value:
+            jsonrpc: "2.0"
+            id: 1
+            result:
+              protocolVersion: "2025-06-18"
+              capabilities:
+                tools:
+                  listChanged: true
+                resources:
+                  subscribe: true
+                  listChanged: true
+                prompts:
+                  listChanged: true
+                logging: {}
+              serverInfo:
+                name: "example-mcp-server"
+                version: "1.0.0"
+        tools_list_response:
+          summary: Tools list response
+          value:
+            jsonrpc: "2.0"
+            id: 2
+            result:
+              tools: []
+
+    JsonRpcError:
+      type: object
+      required: [jsonrpc, id, error]
+      properties:
+        jsonrpc:
+          type: string
+          enum: ["2.0"]
+        id:
+          oneOf:
+            - type: string
+            - type: number
+            - type: null
+        error:
+          $ref: '#/components/schemas/JsonRpcErrorObject'
+
+    JsonRpcErrorObject:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: integer
+          description: Error code
+          enum:
+            - -32700  # Parse error
+            - -32600  # Invalid Request
+            - -32601  # Method not found
+            - -32602  # Invalid params
+            - -32603  # Internal error
+            - -32000  # Server error (reserved range -32000 to -32099)
+            - -32001  # Tool execution error
+            - -32002  # Resource not found
+            - -32003  # Resource access denied
+            - -32004  # Tool not found
+            - -32005  # Prompt not found
+            - -32006  # Session expired
+            - -32007  # Rate limit exceeded
+        message:
+          type: string
+          description: Error message
+        data:
+          type: object
+          description: Additional error data
+
+    Tool:
+      type: object
+      required: [name, description, inputSchema]
+      properties:
+        name:
+          type: string
+          description: Tool identifier
+        description:
+          type: string
+          description: Human-readable tool description
+        inputSchema:
+          type: object
+          description: JSON Schema for tool input validation
+      example:
+        name: "get_weather"
+        description: "Get current weather for a location"
+        inputSchema:
+          type: "object"
+          properties:
+            location:
+              type: "string"
+              description: "City name"
+          required: ["location"]
+          additionalProperties: false
+
+    Resource:
+      type: object
+      required: [uri, name]
+      properties:
+        uri:
+          type: string
+          format: uri
+          description: Resource identifier
+        name:
+          type: string
+          description: Human-readable resource name
+        description:
+          type: string
+          description: Resource description
+        mimeType:
+          type: string
+          description: MIME type of resource content
+      example:
+        uri: "file://documents/readme.md"
+        name: "Project README"
+        description: "Main project documentation"
+        mimeType: "text/markdown"
+
+    ResourceContent:
+      type: object
+      required: [uri, contents]
+      properties:
+        uri:
+          type: string
+          format: uri
+        contents:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/TextContent'
+              - $ref: '#/components/schemas/ImageContent'
+              - $ref: '#/components/schemas/EmbeddedResource'
+
+    TextContent:
+      type: object
+      required: [type, text]
+      properties:
+        type:
+          type: string
+          enum: ["text"]
+        text:
+          type: string
+        annotations:
+          type: object
+
+    ImageContent:
+      type: object
+      required: [type, data, mimeType]
+      properties:
+        type:
+          type: string
+          enum: ["image"]
+        data:
+          type: string
+          format: base64
+        mimeType:
+          type: string
+
+    EmbeddedResource:
+      type: object
+      required: [type, resource]
+      properties:
+        type:
+          type: string
+          enum: ["resource"]
+        resource:
+          $ref: '#/components/schemas/ResourceContent'
+
+    Prompt:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+          description: Prompt identifier
+        description:
+          type: string
+          description: Human-readable prompt description
+        arguments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptArgument'
+      example:
+        name: "summarize_code"
+        description: "Generate a summary of code files"
+        arguments:
+          - name: "language"
+            description: "Programming language"
+            required: true
+
+    PromptArgument:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        required:
+          type: boolean
+          default: false
+
+    PromptMessage:
+      type: object
+      required: [role]
+      properties:
+        role:
+          type: string
+          enum: ["user", "assistant", "system"]
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/TextContent'
+                  - $ref: '#/components/schemas/ImageContent'
+
+    InitializeResult:
+      type: object
+      required: [protocolVersion, capabilities, serverInfo]
+      properties:
+        protocolVersion:
+          type: string
+        capabilities:
+          $ref: '#/components/schemas/ServerCapabilities'
+        serverInfo:
+          $ref: '#/components/schemas/ServerInfo'
+
+    ServerCapabilities:
+      type: object
+      properties:
+        tools:
+          type: object
+          properties:
+            listChanged:
+              type: boolean
+        resources:
+          type: object
+          properties:
+            subscribe:
+              type: boolean
+            listChanged:
+              type: boolean
+        prompts:
+          type: object
+          properties:
+            listChanged:
+              type: boolean
+        logging:
+          type: object
+
+    ServerInfo:
+      type: object
+      required: [name, version]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        author:
+          type: string
+        homepage:
+          type: string
+          format: uri
+        license:
+          type: string
+
+    ClientInfo:
+      type: object
+      required: [name, version]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        author:
+          type: string
+        homepage:
+          type: string
+          format: uri
+        license:
+          type: string
+
+    InitializeRequest:
+      type: object
+      required: [protocolVersion, capabilities, clientInfo]
+      properties:
+        protocolVersion:
+          type: string
+          enum: ["2024-11-05", "2025-03-26", "2025-06-18"]
+        capabilities:
+          $ref: '#/components/schemas/ClientCapabilities'
+        clientInfo:
+          $ref: '#/components/schemas/ClientInfo'
+
+    ClientCapabilities:
+      type: object
+      properties:
+        experimental:
+          type: object
+        sampling:
+          type: object
+        roots:
+          type: object
+          properties:
+            listChanged:
+              type: boolean
+
+    SamplingMessage:
+      type: object
+      required: [role, content]
+      properties:
+        role:
+          type: string
+          enum: ["user", "assistant", "system"]
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/TextContent'
+                  - $ref: '#/components/schemas/ImageContent'
+
+    CreateMessageRequest:
+      type: object
+      required: [messages, maxTokens]
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/SamplingMessage'
+        modelPreferences:
+          type: object
+          properties:
+            hints:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+        maxTokens:
+          type: integer
+          minimum: 1
+        stopSequences:
+          type: array
+          items:
+            type: string
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        metadata:
+          type: object
+
+    CreateMessageResult:
+      type: object
+      required: [role, content, model, stopReason]
+      properties:
+        role:
+          type: string
+          enum: ["assistant"]
+        content:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/TextContent'
+                  - $ref: '#/components/schemas/ImageContent'
+        model:
+          type: string
+        stopReason:
+          type: string
+          enum: ["endTurn", "stopSequence", "maxTokens"]
+        usage:
+          type: object
+          properties:
+            inputTokens:
+              type: integer
+            outputTokens:
+              type: integer
+
+    LoggingLevel:
+      type: string
+      enum: ["debug", "info", "notice", "warning", "error", "critical", "alert", "emergency"]
+
+    PingRequest:
+      type: object
+      properties: {}
+
+    ListRootsResult:
+      type: object
+      required: [roots]
+      properties:
+        roots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Root'
+
+    Root:
+      type: object
+      required: [uri]
+      properties:
+        uri:
+          type: string
+          format: uri
+        name:
+          type: string
+
+    ToolCallResult:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/TextContent'
+              - $ref: '#/components/schemas/ImageContent'
+              - $ref: '#/components/schemas/EmbeddedResource'
+        isError:
+          type: boolean
+          default: false
+
+    ResourceTemplate:
+      type: object
+      required: [uriTemplate, name]
+      properties:
+        uriTemplate:
+          type: string
+          description: URI template with variables
+        name:
+          type: string
+          description: Human-readable template name
+        description:
+          type: string
+          description: Template description
+        mimeType:
+          type: string
+          description: MIME type of resources created from this template
+
+tags:
+  - name: Core Protocol
+    description: Basic MCP protocol operations
+  - name: Tools
+    description: Function calling capabilities
+  - name: Resources
+    description: Data access and retrieval
+  - name: Prompts
+    description: Template management
+  - name: Session Management
+    description: Connection and session handling
+
+externalDocs:
+  description: Model Context Protocol Specification
+  url: https://modelcontextprotocol.io/specification/2025-06-18

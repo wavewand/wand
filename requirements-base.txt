@@ -1,0 +1,96 @@
+# 🪄 Wand MCP Server - Core Requirements
+# Essential dependencies for running the base Wand MCP server
+
+# ============================================================================
+# CORE MCP & FASTAPI FRAMEWORK
+# ============================================================================
+mcp>=1.1.0
+fastmcp>=0.1.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+pydantic-settings>=2.0.0
+
+# gRPC and Protocol Buffers
+grpcio>=1.53.0
+grpcio-tools>=1.53.0
+protobuf>=4.25.0
+
+# ============================================================================
+# HTTP CLIENT & ASYNC SUPPORT
+# ============================================================================
+aiohttp>=3.9.0
+httpx>=0.25.0
+requests>=2.31.0
+websockets>=10.4
+
+# ============================================================================
+# DATABASE & STORAGE (Essential)
+# ============================================================================
+# PostgreSQL
+asyncpg>=0.29.0
+sqlalchemy>=2.0.0
+
+# Redis
+redis>=5.0.0
+
+# ============================================================================
+# ESSENTIAL UTILITIES
+# ============================================================================
+# Configuration
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+toml>=0.10.2
+
+# Logging & monitoring
+structlog>=23.2.0
+psutil>=5.9.0
+watchdog>=3.0.0
+
+# Date/time handling
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# Validation & parsing
+jsonschema>=4.19.0
+pydantic>=2.5.0
+
+# Cryptography & security
+cryptography>=41.0.0
+bcrypt>=4.1.0
+passlib>=1.7.0
+
+# Text processing
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+markdown>=3.5.0
+
+# Scientific computing (needed by several integrations)
+numpy>=1.24.0
+
+# ============================================================================
+# BASIC INTEGRATIONS
+# ============================================================================
+# Essential for most users
+slack-sdk>=3.26.0
+PyGithub>=2.1.0
+boto3>=1.34.0
+docker>=6.1.0
+
+# ============================================================================
+# ADDITIONAL DEPENDENCIES FOR TESTS
+# ============================================================================
+# SSH support
+paramiko>=3.0.0
+
+# Task scheduling
+schedule>=1.2.0
+
+# ============================================================================
+# PRODUCTION ESSENTIALS
+# ============================================================================
+# Production server
+gunicorn>=21.2.0
+
+# Monitoring
+prometheus-client>=0.19.0

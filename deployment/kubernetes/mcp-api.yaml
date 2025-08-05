@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-api
+  namespace: mcp-platform
+  labels:
+    app: mcp-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mcp-api
+  template:
+    metadata:
+      labels:
+        app: mcp-api
+    spec:
+      containers:
+      - name: mcp-api
+        image: mcp-platform:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://mcp_user:$(POSTGRES_PASSWORD)@postgres:5432/mcp_platform"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379/0"
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mcp-platform-secrets
+              key: jwt-secret-key
+        - name: API_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mcp-platform-secrets
+              key: api-key-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcp-platform-secrets
+              key: postgres-password
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcp-platform-secrets
+              key: redis-password
+        envFrom:
+        - configMapRef:
+            name: mcp-platform-config
+        volumeMounts:
+        - name: app-data
+          mountPath: /app/data
+        - name: app-logs
+          mountPath: /app/logs
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: app-data
+        emptyDir: {}
+      - name: app-logs
+        emptyDir: {}
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:15-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h postgres -p 5432 -U mcp_user; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-api
+  namespace: mcp-platform
+  labels:
+    app: mcp-api
+spec:
+  selector:
+    app: mcp-api
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-api-ingress
+  namespace: mcp-platform
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-burst: "200"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mcp-platform.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-api
+            port:
+              number: 8000
+  # TLS configuration (uncomment for HTTPS)
+  # tls:
+  # - hosts:
+  #   - mcp-platform.local
+  #   secretName: mcp-platform-tls

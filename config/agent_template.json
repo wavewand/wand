@@ -1,0 +1,89 @@
+{
+  "agent": {
+    "execution": {
+      "mode": "native",
+      "working_directory": "{WAND_PATH}",
+      "timeout": 60,
+      "max_concurrent_tools": 5
+    },
+    "integrations": {
+      "slack": {
+        "enabled": false,
+        "config_source": "shared",
+        "bot_token": "",
+        "app_token": "",
+        "default_channel": "#general"
+      },
+      "git": {
+        "enabled": false,
+        "config_source": "shared",
+        "github_token": "",
+        "gitlab_token": "",
+        "default_branch": "main"
+      },
+      "jenkins": {
+        "enabled": false,
+        "config_source": "shared",
+        "url": "",
+        "username": "",
+        "token": ""
+      },
+      "youtrack": {
+        "enabled": false,
+        "config_source": "shared",
+        "url": "",
+        "token": ""
+      },
+      "aws": {
+        "enabled": false,
+        "config_source": "shared",
+        "region": "us-east-1",
+        "access_key_id": "",
+        "secret_access_key": ""
+      },
+      "postgres": {
+        "enabled": false,
+        "config_source": "shared",
+        "host": "localhost",
+        "port": 5432,
+        "database": "mcp_data",
+        "username": "",
+        "password": ""
+      },
+      "bambu": {
+        "enabled": false,
+        "config_source": "shared",
+        "api_key": "",
+        "base_url": "https://api.bambulab.com"
+      },
+      "web": {
+        "enabled": false,
+        "config_source": "shared",
+        "search_api_key": "",
+        "timeout": 30
+      }
+    },
+    "resources": {
+      "memory_limit": "1GB",
+      "cpu_limit": "1.0",
+      "max_file_size": "100MB",
+      "temp_directory": "/tmp"
+    },
+    "communication": {
+      "orchestrator_port": 50051,
+      "heartbeat_interval": 30,
+      "message_timeout": 10,
+      "retry_attempts": 3
+    },
+    "tools": {
+      "all_enabled": true,
+      "disabled_tools": [],
+      "security": {
+        "command_validation": true,
+        "path_restrictions": ["{WORKSPACE_PATH}"],
+        "blocked_commands": ["rm -rf /", "sudo", "su"],
+        "max_execution_time": 300
+      }
+    }
+  }
+}

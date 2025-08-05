@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "wand": {
+      "command": [
+        "{WAND_PATH}/venv/bin/python",
+        "{WAND_PATH}/wand.py",
+        "stdio"
+      ],
+      "args": [],
+      "env": {}
+    }
+  }
+}

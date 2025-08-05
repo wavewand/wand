@@ -1,0 +1,161 @@
+{
+  "server": {
+    "http_port": "8000",
+    "metrics_port": "9000",
+    "log_level": "info",
+    "version": "1.0.0"
+  },
+  "database": {
+    "url": "postgres://mcp:mcp-password@localhost/mcp?sslmode=disable",
+    "max_connections": 10,
+    "max_idle_conns": 5,
+    "conn_max_lifetime": 3600
+  },
+  "security": {
+    "enable_auth": true,
+    "jwt_secret": "your-secret-key-change-in-production",
+    "enable_rate_limit": true,
+    "rate_limit": 100,
+    "token_expiry": 3600
+  },
+  "execution": {
+    "mode": "host_agent",
+    "default_timeout": 30,
+    "max_concurrent": 10,
+    "working_directory": "/workspace",
+    "audit_logging": true,
+    "security": {
+      "command_validation": true,
+      "path_restrictions": ["/workspace", "/tmp", "/var/tmp"],
+      "user_isolation": true,
+      "allowed_commands": [
+        "git", "npm", "yarn", "python", "python3", "pip", "pip3",
+        "node", "docker", "ls", "cat", "grep", "find", "head", "tail",
+        "echo", "which", "whoami", "pwd", "mkdir", "touch", "cp", "mv",
+        "curl", "wget", "make", "cmake", "go", "cargo", "rustc"
+      ],
+      "blocked_commands": [
+        "rm", "dd", "mkfs", "fdisk", "mount", "umount",
+        "su", "sudo", "passwd", "useradd", "userdel", "usermod",
+        "systemctl", "service", "kill", "killall", "reboot", "shutdown"
+      ],
+      "max_memory": "2GB",
+      "max_cpu": "2.0",
+      "max_processes": 100,
+      "max_execution_time": 300
+    },
+    "host_agent": {
+      "url": "http://host-agent:8001",
+      "auth_token": "your-host-agent-token-here",
+      "timeout": 30,
+      "retry_attempts": 3,
+      "health_check_interval": 60
+    },
+    "docker_socket": {
+      "socket_path": "/var/run/docker.sock",
+      "default_image": "ubuntu:22.04",
+      "network": "bridge",
+      "working_dir": "/workspace",
+      "auto_remove": true,
+      "memory_limit": "1GB",
+      "cpu_limit": "1.0",
+      "disk_limit": "2GB"
+    },
+    "ssh_remote": {
+      "host": "localhost",
+      "port": 22,
+      "username": "mcp-agent",
+      "auth_method": "key",
+      "key_file": "/app/secrets/mcp_key",
+      "password": "",
+      "known_hosts_file": "/app/config/known_hosts",
+      "timeout": 30,
+      "keepalive": true
+    },
+    "volume_mount": {
+      "host_binary_path": "/host",
+      "chroot_jail": "/workspace",
+      "bind_mounts": [
+        {"host": "/workspace", "container": "/workspace", "mode": "rw"},
+        {"host": "/tmp", "container": "/tmp", "mode": "rw"},
+        {"host": "/usr/local/bin", "container": "/usr/local/bin", "mode": "ro"}
+      ]
+    },
+    "privileged": {
+      "host_root": "/host",
+      "namespace_isolation": false,
+      "capabilities": ["ALL"]
+    }
+  },
+  "integrations": {
+    "slack": {
+      "enabled": false,
+      "bot_token": "",
+      "app_token": "",
+      "default_channel": "#dev-updates"
+    },
+    "git": {
+      "enabled": true,
+      "github_token": "",
+      "gitlab_token": "",
+      "default_branch": "main",
+      "commit_author": "MCP Bot",
+      "commit_email": "mcp-bot@example.com"
+    },
+    "jenkins": {
+      "enabled": false,
+      "url": "",
+      "username": "",
+      "token": "",
+      "default_pipeline": "build"
+    },
+    "youtrack": {
+      "enabled": false,
+      "url": "",
+      "token": "",
+      "default_project": ""
+    },
+    "aws": {
+      "enabled": false,
+      "region": "us-east-1",
+      "access_key_id": "",
+      "secret_access_key": "",
+      "default_bucket": ""
+    },
+    "postgres": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 5432,
+      "database": "mcp_data",
+      "username": "mcp",
+      "password": "",
+      "ssl_mode": "disable"
+    },
+    "bambu": {
+      "enabled": false,
+      "api_key": "",
+      "base_url": "https://api.bambulab.com",
+      "printers": {}
+    },
+    "web": {
+      "enabled": true,
+      "search_api_key": "",
+      "proxy_url": "",
+      "timeout": 30
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "prometheus_endpoint": "/metrics",
+    "collect_interval": 15,
+    "retention_days": 7
+  },
+  "distributed": {
+    "max_concurrent_tasks": 10,
+    "task_queue_size": 200,
+    "message_queue_size": 200,
+    "worker_pool_size": 20,
+    "heartbeat_interval": 30,
+    "task_timeout": 600
+  }
+}

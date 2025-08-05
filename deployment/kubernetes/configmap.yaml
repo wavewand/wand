@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-platform-config
+  namespace: mcp-platform
+data:
+  LOG_LEVEL: "INFO"
+  DEBUG: "false"
+  ENVIRONMENT: "production"
+  HAYSTACK_ENABLED: "true"
+  LLAMAINDEX_ENABLED: "true"
+  ENABLE_METRICS: "true"
+  METRICS_PORT: "9090"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mcp-platform-secrets
+  namespace: mcp-platform
+type: Opaque
+data:
+  # Base64 encoded values - update these with your actual secrets
+  jwt-secret-key: eW91ci1zdXBlci1zZWNyZXQtand0LWtleS1jaGFuZ2UtaW4tcHJvZHVjdGlvbg==
+  api-key-secret: eW91ci1hcGkta2V5LXNlY3JldC1jaGFuZ2UtaW4tcHJvZHVjdGlvbg==
+  postgres-password: bWNwX3Bhc3N3b3Jk
+  redis-password: cmVkaXNfcGFzc3dvcmQ=
+  grafana-password: YWRtaW4=

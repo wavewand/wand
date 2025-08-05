@@ -1,0 +1,74 @@
+# Multi-Framework AI Platform Configuration
+# Environment: development
+
+# API Server Configuration
+api_host: "0.0.0.0"
+api_port: 8000
+api_debug: true
+api_reload: true
+api_workers: 1
+api_cors_origins: ["http://localhost:3000", "http://localhost:3001", "*"]
+api_max_request_size: 10485760  # 10MB
+api_request_timeout: 300
+
+# Database Configuration
+database_url: "sqlite:///./mcp_platform.db"
+database_pool_size: 20
+database_max_overflow: 30
+database_pool_timeout: 30
+database_pool_recycle: 3600
+database_echo: false
+database_migration_dir: "migrations"
+
+# Cache Configuration
+cache_enabled: true
+cache_backend: "memory"
+cache_redis_url: "redis://localhost:6379/0"
+cache_default_ttl: 3600
+cache_max_size: 1000
+cache_key_prefix: "mcp:"
+
+# Security Configuration
+security_jwt_secret: "your-secret-key-change-in-production"
+security_jwt_algorithm: "HS256"
+security_jwt_access_token_expire: 3600
+security_jwt_refresh_token_expire: 2592000  # 30 days
+security_api_key_length: 32
+security_password_min_length: 8
+security_password_require_special: true
+security_rate_limit_enabled: true
+security_rate_limit_per_minute: 60
+security_rate_limit_per_hour: 1000
+security_rate_limit_per_day: 10000
+security_cors_enabled: true
+security_https_only: false
+
+# Monitoring Configuration
+monitoring_enabled: true
+monitoring_metrics_enabled: true
+monitoring_tracing_enabled: false
+monitoring_logging_level: "INFO"
+monitoring_log_format: "json"
+monitoring_log_file: null
+monitoring_metrics_port: 9090
+monitoring_health_check_interval: 30
+monitoring_jaeger_endpoint: null
+monitoring_prometheus_enabled: false
+
+# Framework Configuration
+framework_default: "haystack"
+framework_enabled: ["haystack", "llamaindex"]
+framework_timeout: 300
+framework_max_concurrent: 10
+framework_circuit_breaker_enabled: true
+framework_circuit_breaker_threshold: 5
+framework_circuit_breaker_timeout: 60
+framework_retry_enabled: true
+framework_retry_max_attempts: 3
+framework_retry_base_delay: 1.0
+
+# Framework-specific settings (use environment variables or secrets for API keys)
+haystack_api_key: null
+haystack_endpoint: null
+llamaindex_api_key: null
+llamaindex_endpoint: null

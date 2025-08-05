@@ -1,0 +1,92 @@
+{
+  "server": {
+    "http_port": "8000",
+    "metrics_port": "9100",
+    "log_level": "info",
+    "version": "1.0.0",
+    "cors_enabled": true,
+    "cors_origins": ["http://localhost:3000", "http://localhost:8080"]
+  },
+  "database": {
+    "url": "sqlite:///app/data/wand.db",
+    "max_connections": 10,
+    "max_idle_conns": 5,
+    "conn_max_lifetime": 3600
+  },
+  "security": {
+    "enable_auth": false,
+    "jwt_secret": "wand-privileged-demo-key",
+    "enable_rate_limit": false,
+    "rate_limit": 1000,
+    "token_expiry": 3600
+  },
+  "execution": {
+    "mode": "privileged",
+    "default_timeout": 60,
+    "max_concurrent": 20,
+    "working_directory": "/workspace",
+    "audit_logging": true,
+    "security": {
+      "command_validation": false,
+      "path_restrictions": [],
+      "user_isolation": false,
+      "allowed_commands": [],
+      "blocked_commands": [],
+      "max_memory": "8GB",
+      "max_cpu": "4.0",
+      "max_processes": 1000,
+      "max_execution_time": 600
+    },
+    "privileged": {
+      "host_root": "/host",
+      "namespace_isolation": false,
+      "capabilities": ["ALL"],
+      "allow_dangerous_commands": true,
+      "mount_host_filesystem": true
+    }
+  },
+  "integrations": {
+    "slack": {
+      "enabled": false
+    },
+    "git": {
+      "enabled": true,
+      "default_branch": "main",
+      "commit_author": "Wand Bot",
+      "commit_email": "wand-bot@example.com"
+    },
+    "jenkins": {
+      "enabled": false
+    },
+    "youtrack": {
+      "enabled": false
+    },
+    "aws": {
+      "enabled": false
+    },
+    "postgres": {
+      "enabled": false
+    },
+    "bambu": {
+      "enabled": false
+    },
+    "web": {
+      "enabled": true,
+      "timeout": 30
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "prometheus_endpoint": "/metrics",
+    "collect_interval": 15,
+    "retention_days": 7
+  },
+  "distributed": {
+    "max_concurrent_tasks": 50,
+    "task_queue_size": 500,
+    "message_queue_size": 500,
+    "worker_pool_size": 20,
+    "heartbeat_interval": 30,
+    "task_timeout": 600
+  }
+}

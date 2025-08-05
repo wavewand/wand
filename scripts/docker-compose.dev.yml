@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # MCP Distributed System
+  mcp-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-distributed-system-dev
+    ports:
+      - "8000:8000"    # REST API
+      - "50051:50051"  # Coordinator gRPC
+      - "50200:50200"  # Integration gRPC
+      - "50100-50106:50100-50106"  # Agent ports
+    environment:
+      - LOG_LEVEL=DEBUG
+      - COORDINATOR_PORT=50051
+      - INTEGRATION_PORT=50200
+      - REST_API_PORT=8000
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - mcp-dev-network
+    restart: unless-stopped
+
+  # MCP UI (disabled - would require UI files in ./ui subdirectory)
+  # mcp-ui:
+  #   build:
+  #     context: ./ui
+  #     dockerfile: Dockerfile.dev
+  #   container_name: mcp-ui-dev
+  #   ports:
+  #     - "3000:3000"  # React dev server
+  #   environment:
+  #     - REACT_APP_API_URL=http://localhost:8000
+  #     - REACT_APP_WS_URL=ws://localhost:8000
+  #   volumes:
+  #     - ./ui:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - mcp-system
+  #   networks:
+  #     - mcp-dev-network
+  #   restart: unless-stopped
+
+networks:
+  mcp-dev-network:
+    driver: bridge

@@ -1,0 +1,1862 @@
+openapi: 3.0.3
+info:
+  title: MCP Python API
+  description: |
+    Comprehensive Multi-Framework AI Platform API
+
+    This API provides unified access to multiple AI frameworks including:
+    - Haystack for retrieval-augmented generation
+    - LlamaIndex for document indexing and querying
+    - LangChain for chains and agents
+    - LangGraph for stateful workflows
+    - OpenAI for direct API access
+    - Transformers for local model inference
+    - Anthropic Claude for advanced reasoning
+    - Cohere for text generation and embeddings
+    - Custom framework adapters
+
+    Features:
+    - Multi-framework query processing
+    - Advanced search and filtering
+    - Real-time analytics and monitoring
+    - Comprehensive agent management
+    - Document processing and RAG
+    - Stateful workflow execution
+    - Custom framework integration
+
+  version: 1.0.0
+  contact:
+    name: MCP Python API Support
+    email: support@mcp-python.com
+  license:
+    name: Proprietary License
+    url: https://github.com/wavewand/wand/blob/main/LICENSE
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.mcp-python.com
+    description: Production server
+
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  # Health and Status
+  /health:
+    get:
+      summary: Health check
+      description: Check the health status of the API and all connected frameworks
+      tags: [Health]
+      responses:
+        '200':
+          description: System health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /status:
+    get:
+      summary: System status
+      description: Get detailed system status including framework availability
+      tags: [Health]
+      responses:
+        '200':
+          description: Detailed system status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+
+  # Framework Management
+  /frameworks:
+    get:
+      summary: List available frameworks
+      description: Get list of all available AI frameworks and their status
+      tags: [Frameworks]
+      responses:
+        '200':
+          description: List of available frameworks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FrameworkInfo'
+
+  /frameworks/{framework}/health:
+    get:
+      summary: Framework health check
+      description: Check health of a specific framework
+      tags: [Frameworks]
+      parameters:
+        - name: framework
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [haystack, llamaindex, langchain, langgraph, openai, transformers, anthropic, cohere, custom]
+      responses:
+        '200':
+          description: Framework health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FrameworkHealth'
+
+  # Query Processing
+  /query:
+    post:
+      summary: Execute multi-framework query
+      description: Execute a query that can be routed to the most appropriate framework
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Invalid query request
+        '500':
+          description: Query processing failed
+
+  /query/batch:
+    post:
+      summary: Execute batch queries
+      description: Execute multiple queries in batch for better performance
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchQueryRequest'
+      responses:
+        '200':
+          description: Batch query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchQueryResponse'
+
+  # Framework-Specific Endpoints
+  /haystack/query:
+    post:
+      summary: Execute Haystack query
+      description: Execute a query using Haystack framework
+      tags: [Haystack]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HaystackQuery'
+      responses:
+        '200':
+          description: Haystack query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HaystackResponse'
+
+  /haystack/pipelines:
+    get:
+      summary: List Haystack pipelines
+      tags: [Haystack]
+      responses:
+        '200':
+          description: List of available pipelines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PipelineInfo'
+    post:
+      summary: Create Haystack pipeline
+      tags: [Haystack]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePipelineRequest'
+      responses:
+        '201':
+          description: Pipeline created successfully
+
+  /llamaindex/query:
+    post:
+      summary: Execute LlamaIndex query
+      description: Query documents using LlamaIndex
+      tags: [LlamaIndex]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LlamaIndexQuery'
+      responses:
+        '200':
+          description: LlamaIndex query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LlamaIndexResponse'
+
+  /llamaindex/documents:
+    post:
+      summary: Add documents to LlamaIndex
+      tags: [LlamaIndex]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddDocumentsRequest'
+      responses:
+        '201':
+          description: Documents added successfully
+
+  /langchain/chains:
+    get:
+      summary: List LangChain chains
+      tags: [LangChain]
+      responses:
+        '200':
+          description: List of available chains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChainInfo'
+    post:
+      summary: Create LangChain chain
+      tags: [LangChain]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChainRequest'
+      responses:
+        '201':
+          description: Chain created successfully
+
+  /langchain/agents:
+    get:
+      summary: List LangChain agents
+      tags: [LangChain]
+      responses:
+        '200':
+          description: List of available agents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentInfo'
+    post:
+      summary: Create LangChain agent
+      tags: [LangChain]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAgentRequest'
+      responses:
+        '201':
+          description: Agent created successfully
+
+  /langgraph/workflows:
+    get:
+      summary: List LangGraph workflows
+      tags: [LangGraph]
+      responses:
+        '200':
+          description: List of available workflows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowInfo'
+    post:
+      summary: Create LangGraph workflow
+      tags: [LangGraph]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkflowRequest'
+      responses:
+        '201':
+          description: Workflow created successfully
+
+  /langgraph/workflows/{workflowId}/execute:
+    post:
+      summary: Execute LangGraph workflow
+      tags: [LangGraph]
+      parameters:
+        - name: workflowId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteWorkflowRequest'
+      responses:
+        '200':
+          description: Workflow execution results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowExecutionResponse'
+
+  # OpenAI API
+  /openai/completions:
+    post:
+      summary: OpenAI text completion
+      tags: [OpenAI]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenAICompletionRequest'
+      responses:
+        '200':
+          description: Completion results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIResponse'
+
+  /openai/chat/completions:
+    post:
+      summary: OpenAI chat completion
+      tags: [OpenAI]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenAIChatRequest'
+      responses:
+        '200':
+          description: Chat completion results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIResponse'
+
+  /openai/embeddings:
+    post:
+      summary: OpenAI embeddings
+      tags: [OpenAI]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenAIEmbeddingRequest'
+      responses:
+        '200':
+          description: Embedding results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIResponse'
+
+  # Transformers API
+  /transformers/generate:
+    post:
+      summary: Generate text using Transformers
+      tags: [Transformers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformersGenerateRequest'
+      responses:
+        '200':
+          description: Text generation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformersResponse'
+
+  /transformers/classify:
+    post:
+      summary: Classify text using Transformers
+      tags: [Transformers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformersClassifyRequest'
+      responses:
+        '200':
+          description: Classification results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformersResponse'
+
+  /transformers/embed:
+    post:
+      summary: Extract embeddings using Transformers
+      tags: [Transformers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformersEmbedRequest'
+      responses:
+        '200':
+          description: Embedding results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformersResponse'
+
+  # Anthropic API
+  /anthropic/messages:
+    post:
+      summary: Send message to Claude
+      tags: [Anthropic]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnthropicMessageRequest'
+      responses:
+        '200':
+          description: Claude response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnthropicResponse'
+
+  /anthropic/chat:
+    post:
+      summary: Chat with Claude (with conversation management)
+      tags: [Anthropic]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnthropicChatRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnthropicResponse'
+
+  # Cohere API
+  /cohere/generate:
+    post:
+      summary: Generate text using Cohere
+      tags: [Cohere]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CohereGenerateRequest'
+      responses:
+        '200':
+          description: Generation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohereResponse'
+
+  /cohere/embed:
+    post:
+      summary: Generate embeddings using Cohere
+      tags: [Cohere]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CohereEmbedRequest'
+      responses:
+        '200':
+          description: Embedding results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohereResponse'
+
+  /cohere/classify:
+    post:
+      summary: Classify text using Cohere
+      tags: [Cohere]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CohereClassifyRequest'
+      responses:
+        '200':
+          description: Classification results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohereResponse'
+
+  /cohere/rerank:
+    post:
+      summary: Rerank documents using Cohere
+      tags: [Cohere]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CohereRerankRequest'
+      responses:
+        '200':
+          description: Reranking results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohereResponse'
+
+  # Custom Framework Adapter
+  /custom/adapters:
+    get:
+      summary: List custom framework adapters
+      tags: [Custom]
+      responses:
+        '200':
+          description: List of available custom adapters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomAdapterInfo'
+    post:
+      summary: Register custom framework adapter
+      tags: [Custom]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterAdapterRequest'
+      responses:
+        '201':
+          description: Adapter registered successfully
+
+  /custom/adapters/{adapterName}/query:
+    post:
+      summary: Execute query using custom adapter
+      tags: [Custom]
+      parameters:
+        - name: adapterName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomAdapterQuery'
+      responses:
+        '200':
+          description: Custom adapter query results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAdapterResponse'
+
+  # Search and Analytics
+  /search:
+    get:
+      summary: Advanced search across all entities
+      description: |
+        Comprehensive search with advanced filtering, sorting, and pagination.
+        Supports full-text search, field-specific filters, and complex queries.
+      tags: [Search]
+      parameters:
+        - name: q
+          in: query
+          description: Full-text search query
+          schema:
+            type: string
+        - name: entity_type
+          in: query
+          description: Type of entity to search
+          schema:
+            type: string
+            enum: [queries, responses, documents, pipelines, chains, agents, workflows]
+        - name: framework
+          in: query
+          description: Filter by framework
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+        - name: created_after
+          in: query
+          description: Filter by creation date (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: created_before
+          in: query
+          description: Filter by creation date (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: sort_by
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            default: created_at
+        - name: sort_order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+        - name: page
+          in: query
+          description: Page number (1-based)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: page_size
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  # Analytics and Monitoring
+  /analytics/overview:
+    get:
+      summary: Get analytics overview
+      tags: [Analytics]
+      parameters:
+        - name: time_range
+          in: query
+          description: Time range for analytics
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d, 90d]
+            default: 24h
+      responses:
+        '200':
+          description: Analytics overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsOverview'
+
+  /analytics/usage:
+    get:
+      summary: Get usage statistics
+      tags: [Analytics]
+      parameters:
+        - name: framework
+          in: query
+          description: Filter by framework
+          schema:
+            type: string
+        - name: time_range
+          in: query
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d, 90d]
+            default: 24h
+      responses:
+        '200':
+          description: Usage statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageStatistics'
+
+  /analytics/performance:
+    get:
+      summary: Get performance metrics
+      tags: [Analytics]
+      parameters:
+        - name: time_range
+          in: query
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d, 90d]
+            default: 24h
+      responses:
+        '200':
+          description: Performance metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceMetrics'
+
+  # Document Management
+  /documents:
+    get:
+      summary: List documents
+      tags: [Documents]
+      parameters:
+        - name: framework
+          in: query
+          schema:
+            type: string
+        - name: collection
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+    post:
+      summary: Add documents
+      tags: [Documents]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddDocumentsRequest'
+      responses:
+        '201':
+          description: Documents added successfully
+
+  /documents/{documentId}:
+    get:
+      summary: Get document details
+      tags: [Documents]
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Document details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetails'
+    delete:
+      summary: Delete document
+      tags: [Documents]
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Document deleted successfully
+
+  # Agent Management
+  /agents:
+    get:
+      summary: List all agents across frameworks
+      tags: [Agents]
+      responses:
+        '200':
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentInfo'
+
+  /agents/{agentId}/execute:
+    post:
+      summary: Execute agent task
+      tags: [Agents]
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentExecuteRequest'
+      responses:
+        '200':
+          description: Agent execution results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentExecuteResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    # Common Response Types
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy, degraded]
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+        frameworks:
+          type: object
+          additionalProperties:
+            type: string
+            enum: [healthy, unhealthy, unknown]
+        uptime_seconds:
+          type: number
+
+    StatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        system_info:
+          type: object
+          properties:
+            cpu_usage:
+              type: number
+            memory_usage:
+              type: number
+            disk_usage:
+              type: number
+        framework_status:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrameworkInfo'
+        active_connections:
+          type: integer
+        total_requests:
+          type: integer
+
+    FrameworkInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [healthy, unhealthy, unknown]
+        version:
+          type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+        last_health_check:
+          type: string
+          format: date-time
+
+    FrameworkHealth:
+      type: object
+      properties:
+        framework:
+          type: string
+        status:
+          type: string
+        details:
+          type: object
+        last_check:
+          type: string
+          format: date-time
+
+    # Query Types
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The query text
+        framework:
+          type: string
+          description: Preferred framework (optional, will auto-select if not provided)
+        parameters:
+          type: object
+          description: Framework-specific parameters
+        context:
+          type: object
+          description: Additional context for the query
+
+    QueryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        framework:
+          type: string
+        response:
+          type: string
+        metadata:
+          type: object
+        execution_time_ms:
+          type: number
+        query_id:
+          type: string
+
+    BatchQueryRequest:
+      type: object
+      required:
+        - queries
+      properties:
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryRequest'
+        batch_size:
+          type: integer
+          default: 10
+
+    BatchQueryResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryResponse'
+        total_queries:
+          type: integer
+        successful_queries:
+          type: integer
+        failed_queries:
+          type: integer
+        total_execution_time_ms:
+          type: number
+
+    # Framework-Specific Request/Response Types
+    HaystackQuery:
+      type: object
+      required:
+        - query
+        - pipeline_name
+      properties:
+        query:
+          type: string
+        pipeline_name:
+          type: string
+        parameters:
+          type: object
+        top_k:
+          type: integer
+          default: 10
+
+    HaystackResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              answer:
+                type: string
+              score:
+                type: number
+              context:
+                type: string
+              document_id:
+                type: string
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        execution_time_ms:
+          type: number
+
+    LlamaIndexQuery:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+        index_name:
+          type: string
+        similarity_top_k:
+          type: integer
+          default: 5
+        response_mode:
+          type: string
+          enum: [compact, tree_summarize, simple_summarize]
+          default: compact
+
+    LlamaIndexResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        response:
+          type: string
+        source_nodes:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              score:
+                type: number
+              metadata:
+                type: object
+        execution_time_ms:
+          type: number
+
+    OpenAICompletionRequest:
+      type: object
+      required:
+        - prompt
+      properties:
+        prompt:
+          type: string
+        model:
+          type: string
+          default: gpt-3.5-turbo
+        max_tokens:
+          type: integer
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        top_p:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    OpenAIChatRequest:
+      type: object
+      required:
+        - messages
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [system, user, assistant]
+              content:
+                type: string
+        model:
+          type: string
+          default: gpt-3.5-turbo
+        max_tokens:
+          type: integer
+        temperature:
+          type: number
+
+    OpenAIEmbeddingRequest:
+      type: object
+      required:
+        - input
+      properties:
+        input:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        model:
+          type: string
+          default: text-embedding-ada-002
+
+    OpenAIResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        choices:
+          type: array
+          items:
+            type: object
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+
+    TransformersGenerateRequest:
+      type: object
+      required:
+        - prompt
+      properties:
+        prompt:
+          type: string
+        model_name:
+          type: string
+        max_length:
+          type: integer
+        temperature:
+          type: number
+        top_k:
+          type: integer
+        top_p:
+          type: number
+
+    TransformersClassifyRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+        model_name:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+
+    TransformersEmbedRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        model_name:
+          type: string
+
+    TransformersResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              label:
+                type: string
+              score:
+                type: number
+              embeddings:
+                type: array
+                items:
+                  type: number
+        generation_time_ms:
+          type: number
+
+    AnthropicMessageRequest:
+      type: object
+      required:
+        - messages
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [user, assistant, system]
+              content:
+                type: string
+        model:
+          type: string
+          default: claude-3-sonnet-20240229
+        max_tokens:
+          type: integer
+        temperature:
+          type: number
+
+    AnthropicChatRequest:
+      type: object
+      required:
+        - message
+        - conversation_id
+      properties:
+        message:
+          type: string
+        conversation_id:
+          type: string
+        system_prompt:
+          type: string
+        model:
+          type: string
+
+    AnthropicResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        content:
+          type: string
+        usage:
+          type: object
+          properties:
+            input_tokens:
+              type: integer
+            output_tokens:
+              type: integer
+        stop_reason:
+          type: string
+
+    CohereGenerateRequest:
+      type: object
+      required:
+        - prompt
+      properties:
+        prompt:
+          type: string
+        model:
+          type: string
+          default: command
+        max_tokens:
+          type: integer
+        temperature:
+          type: number
+        top_k:
+          type: integer
+        top_p:
+          type: number
+
+    CohereEmbedRequest:
+      type: object
+      required:
+        - texts
+      properties:
+        texts:
+          type: array
+          items:
+            type: string
+        model:
+          type: string
+          default: embed-english-v3.0
+        input_type:
+          type: string
+          enum: [search_document, search_query, classification, clustering]
+
+    CohereClassifyRequest:
+      type: object
+      required:
+        - inputs
+      properties:
+        inputs:
+          type: array
+          items:
+            type: string
+        examples:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              label:
+                type: string
+
+    CohereRerankRequest:
+      type: object
+      required:
+        - query
+        - documents
+      properties:
+        query:
+          type: string
+        documents:
+          type: array
+          items:
+            type: string
+        top_n:
+          type: integer
+
+    CohereResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        generations:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+        embeddings:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+        classifications:
+          type: array
+          items:
+            type: object
+        rerank_results:
+          type: array
+          items:
+            type: object
+
+    # Custom Adapter Types
+    CustomAdapterInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        base_url:
+          type: string
+        authentication:
+          type: string
+        endpoints:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+
+    RegisterAdapterRequest:
+      type: object
+      required:
+        - name
+        - version
+        - description
+        - base_url
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        base_url:
+          type: string
+        authentication:
+          type: string
+          enum: [none, api_key, bearer_token, basic_auth, oauth2, custom]
+        auth_config:
+          type: object
+        endpoints:
+          type: array
+          items:
+            type: object
+
+    CustomAdapterQuery:
+      type: object
+      required:
+        - endpoint_name
+      properties:
+        endpoint_name:
+          type: string
+        parameters:
+          type: object
+        timeout:
+          type: number
+        headers:
+          type: object
+
+    CustomAdapterResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        endpoint_name:
+          type: string
+        data:
+          type: object
+        status_code:
+          type: integer
+        request_duration_ms:
+          type: number
+
+    # Search and Analytics
+    SearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+        total_count:
+          type: integer
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total_pages:
+          type: integer
+        facets:
+          type: object
+        search_time_ms:
+          type: number
+
+    AnalyticsOverview:
+      type: object
+      properties:
+        total_queries:
+          type: integer
+        successful_queries:
+          type: integer
+        failed_queries:
+          type: integer
+        average_response_time_ms:
+          type: number
+        active_frameworks:
+          type: integer
+        top_frameworks:
+          type: array
+          items:
+            type: object
+            properties:
+              framework:
+                type: string
+              query_count:
+                type: integer
+        query_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              count:
+                type: integer
+
+    UsageStatistics:
+      type: object
+      properties:
+        framework_usage:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              queries:
+                type: integer
+              success_rate:
+                type: number
+              avg_response_time_ms:
+                type: number
+        time_series:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              framework:
+                type: string
+              queries:
+                type: integer
+
+    PerformanceMetrics:
+      type: object
+      properties:
+        overall_performance:
+          type: object
+          properties:
+            avg_response_time_ms:
+              type: number
+            p50_response_time_ms:
+              type: number
+            p95_response_time_ms:
+              type: number
+            p99_response_time_ms:
+              type: number
+            throughput_qps:
+              type: number
+        framework_performance:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              avg_response_time_ms:
+                type: number
+              success_rate:
+                type: number
+              error_rate:
+                type: number
+
+    # Document Management
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        metadata:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        framework:
+          type: string
+
+    DocumentList:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        total_count:
+          type: integer
+        page:
+          type: integer
+        page_size:
+          type: integer
+
+    DocumentDetails:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - type: object
+          properties:
+            embeddings:
+              type: array
+              items:
+                type: number
+            chunks:
+              type: array
+              items:
+                type: object
+
+    AddDocumentsRequest:
+      type: object
+      required:
+        - documents
+      properties:
+        documents:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: string
+              metadata:
+                type: object
+        framework:
+          type: string
+        collection:
+          type: string
+
+    # Pipeline and Chain Management
+    PipelineInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        framework:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    CreatePipelineRequest:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          type: object
+        description:
+          type: string
+
+    ChainInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    CreateChainRequest:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          type: object
+
+    AgentInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        framework:
+          type: string
+        status:
+          type: string
+        tools:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+
+    CreateAgentRequest:
+      type: object
+      required:
+        - name
+        - type
+        - tools
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        tools:
+          type: array
+          items:
+            type: string
+        config:
+          type: object
+
+    AgentExecuteRequest:
+      type: object
+      required:
+        - task
+      properties:
+        task:
+          type: string
+        parameters:
+          type: object
+
+    AgentExecuteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        result:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+        execution_time_ms:
+          type: number
+
+    # Workflow Management
+    WorkflowInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        nodes:
+          type: integer
+        edges:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    CreateWorkflowRequest:
+      type: object
+      required:
+        - name
+        - nodes
+        - edges
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        nodes:
+          type: array
+          items:
+            type: object
+        edges:
+          type: array
+          items:
+            type: object
+
+    ExecuteWorkflowRequest:
+      type: object
+      required:
+        - input_data
+      properties:
+        input_data:
+          type: object
+        max_iterations:
+          type: integer
+        timeout_seconds:
+          type: integer
+
+    WorkflowExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        workflow_id:
+          type: string
+        execution_id:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed, paused, cancelled]
+        output_data:
+          type: object
+        execution_path:
+          type: array
+          items:
+            type: string
+        iterations_executed:
+          type: integer
+        execution_time_ms:
+          type: number
+
+tags:
+  - name: Health
+    description: Health and status endpoints
+  - name: Frameworks
+    description: Framework management and health
+  - name: Query
+    description: Multi-framework query processing
+  - name: Haystack
+    description: Haystack framework operations
+  - name: LlamaIndex
+    description: LlamaIndex framework operations
+  - name: LangChain
+    description: LangChain framework operations
+  - name: LangGraph
+    description: LangGraph workflow operations
+  - name: OpenAI
+    description: OpenAI API operations
+  - name: Transformers
+    description: Hugging Face Transformers operations
+  - name: Anthropic
+    description: Anthropic Claude operations
+  - name: Cohere
+    description: Cohere API operations
+  - name: Custom
+    description: Custom framework adapter operations
+  - name: Search
+    description: Advanced search and filtering
+  - name: Analytics
+    description: Analytics and monitoring
+  - name: Documents
+    description: Document management
+  - name: Agents
+    description: Agent management and execution

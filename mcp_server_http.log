@@ -1,0 +1,575 @@
+2025-08-04 21:24:04,925 - __main__ - INFO - 🚀 Starting MCP Multi-Agent System
+2025-08-04 21:24:04,926 - __main__ - INFO - ============================================================
+2025-08-04 21:24:04,926 - __main__ - INFO - Starting HTTP transport for OpenCode
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: manager (manager)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: frontend_1 (frontend)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: backend_1 (backend)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: database (database)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: devops (devops)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: integration (integration)
+2025-08-04 21:24:04,926 - core.task_manager - INFO - Registered agent: haystack (haystack)
+2025-08-04 21:24:04,926 - orchestrator.agent_orchestrator - INFO - Starting Agent Orchestrator...
+2025-08-04 21:24:05,998 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,000 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,000 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:06,000 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:06,000 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:06,000 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,000 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,000 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:06,000 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:06,001 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:06,001 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,001 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,001 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:06,001 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:06,001 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:24:06,001 - orchestrator.agent_orchestrator - INFO - Agent Orchestrator started with 3 agents
+2025-08-04 21:24:06,001 - __main__ - INFO - ✓ Agent orchestrator started
+2025-08-04 21:24:06,006 - __main__ - INFO - ✓ HTTP MCP transport created
+2025-08-04 21:24:06,007 - __main__ - INFO - 🌐 Starting HTTP MCP server on port 8001
+INFO:     Started server process [25827]
+INFO:     Waiting for application startup.
+2025-08-04 21:24:06,126 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:06,126 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,127 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,127 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:06,127 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:06,127 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:06,127 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:06,127 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,127 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,127 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:06,127 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:06,127 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:06,127 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:06,127 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:06,127 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:06,128 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:06,128 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:06,128 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60062 - "GET /health HTTP/1.1" 200 OK
+2025-08-04 21:24:16,129 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:16,130 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:16,130 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:16,130 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:16,130 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:16,131 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:16,131 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:16,131 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:16,131 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:16,132 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:16,132 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:16,132 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:16,132 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:16,134 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:16,134 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:16,134 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:16,134 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:16,134 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:24:26,135 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:26,136 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:26,136 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:26,136 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:26,136 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:26,136 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:26,136 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:26,136 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:26,136 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:26,136 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:26,136 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:26,136 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:26,136 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:26,136 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:26,136 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:26,136 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:26,137 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:26,137 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:24:36,137 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:36,137 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:36,138 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:36,138 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:36,138 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:36,138 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:36,138 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:36,138 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:36,138 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:36,138 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:36,138 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:36,138 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:36,138 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:46,139 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:46,139 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:46,139 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:46,139 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:46,139 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:46,139 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:46,139 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:46,139 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:24:56,141 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:56,141 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:24:56,141 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:56,141 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:24:56,141 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:24:56,141 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:24:56,141 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:24:56,141 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:06,143 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:06,143 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:06,143 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:06,143 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:06,143 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:06,143 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:06,143 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:06,143 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:06,143 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:06,143 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:06,143 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:06,144 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:06,144 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:06,144 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:06,144 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:06,144 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:06,144 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:06,144 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:16,145 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:16,145 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:16,145 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:16,145 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:16,145 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:16,145 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:16,145 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:16,145 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:16,145 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:16,145 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:16,145 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:16,146 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:16,146 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:16,146 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:16,146 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:16,146 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:16,146 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:16,146 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:26,147 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:26,148 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:26,148 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:26,148 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:26,148 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:26,148 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:26,148 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:26,148 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:26,148 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:26,148 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:26,148 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:26,148 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:26,148 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:36,150 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:36,151 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:36,151 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:36,151 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:36,152 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:36,152 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:36,152 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:36,152 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:36,152 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:36,152 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:36,152 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:36,152 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:36,152 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:36,152 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:36,152 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:36,152 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:36,152 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:36,152 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:46,154 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:46,155 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:46,155 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:46,156 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:46,156 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:46,156 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:46,156 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:46,156 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:46,156 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:46,156 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:46,156 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:46,156 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:46,157 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:46,157 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:46,157 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:46,157 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:46,157 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:46,157 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:25:56,158 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:25:56,159 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:56,159 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:25:56,159 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:25:56,159 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:25:56,159 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:56,159 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:25:56,159 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:25:56,159 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:25:56,159 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:25:56,159 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:25:56,159 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:25:56,159 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:06,161 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:06,162 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:06,162 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:06,162 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:06,162 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:06,162 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:06,162 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:06,162 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:06,162 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:06,163 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:06,163 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:06,163 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:06,163 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:06,163 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:06,163 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:06,163 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:06,163 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:06,163 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:16,173 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:16,174 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:16,174 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:16,175 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:16,175 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:16,175 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:16,175 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:16,175 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:16,175 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:16,175 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:16,175 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:16,175 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:16,175 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:26,182 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:26,183 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:26,183 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:26,183 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:26,183 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:26,183 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:26,183 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:26,183 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:26,183 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:26,183 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:26,183 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:26,183 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:26,184 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:36,187 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:36,188 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:36,188 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:36,188 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:36,188 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:36,188 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:36,188 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:36,188 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:36,189 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:36,189 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:36,189 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:36,189 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:36,189 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:36,189 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:36,189 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:36,189 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:36,189 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:36,189 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:46,191 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:46,192 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:46,192 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:46,192 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:46,192 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:46,192 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:46,192 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:46,192 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:46,193 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:46,193 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:46,193 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:46,193 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:46,193 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:46,194 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:46,194 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:46,194 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:46,194 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:46,195 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:26:56,197 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:26:56,197 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:56,198 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:56,198 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:26:56,198 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:26:56,198 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:26:56,198 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:26:56,198 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:56,199 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:56,199 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:26:56,199 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:26:56,199 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:26:56,199 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:26:56,199 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:26:56,199 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:26:56,199 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:26:56,200 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:26:56,200 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:06,202 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:06,202 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:06,202 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:06,202 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:06,202 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:06,202 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:06,202 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:06,202 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:06,202 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:06,202 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:06,202 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:06,202 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:06,202 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:06,203 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:06,203 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:06,203 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:06,203 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:06,203 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:16,204 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:16,204 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:16,204 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:16,204 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:16,204 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:16,205 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:16,205 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:16,205 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:16,205 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:16,205 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:16,205 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:16,205 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:16,205 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:16,205 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:16,205 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:16,205 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:16,205 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:16,205 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:26,206 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:26,212 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:26,212 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:26,212 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:26,212 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:26,212 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:26,212 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:26,212 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:26,212 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:26,212 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:26,212 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:26,212 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:26,212 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:26,212 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:26,213 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:26,213 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:26,213 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:26,213 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:36,214 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:36,214 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:36,214 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:36,215 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:36,215 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:36,215 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:36,215 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:36,215 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:36,215 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:36,215 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:36,215 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:36,215 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:36,215 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:46,216 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:46,216 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:46,216 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:46,217 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:46,217 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:46,217 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:46,217 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:46,217 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:46,217 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:46,217 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:46,217 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:46,217 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:46,217 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:27:56,218 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:27:56,218 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:56,219 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:27:56,219 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:27:56,219 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:27:56,219 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:56,219 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:27:56,219 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:27:56,219 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:27:56,219 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:27:56,219 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:27:56,219 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:27:56,219 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:06,220 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:06,221 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:06,221 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:06,221 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:06,221 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:06,221 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:06,221 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:06,221 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:06,221 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:06,221 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:06,221 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:06,221 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:06,221 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:16,223 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:16,223 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:16,223 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:16,223 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:16,223 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:16,223 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:16,223 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:16,223 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:16,223 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:16,223 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:16,223 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:16,223 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:16,224 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:26,224 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:26,224 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:26,224 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:26,224 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:26,224 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:26,224 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:26,224 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:26,224 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:26,224 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:26,224 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:26,224 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:26,224 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:26,224 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:26,225 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:26,225 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:26,225 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:26,225 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:26,225 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:36,225 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:36,226 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:36,226 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:36,226 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:36,226 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:36,226 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:36,226 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:36,226 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:36,226 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:36,226 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:36,226 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:36,226 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:36,226 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:46,227 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:46,228 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:46,228 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:46,228 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:46,228 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:46,228 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:46,228 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:46,228 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:46,228 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:46,228 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:46,228 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:46,228 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:46,228 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2
+2025-08-04 21:28:56,229 - orchestrator.agent_orchestrator - WARNING - Agent initial-0 failed health check, restarting...
+2025-08-04 21:28:56,229 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:56,230 - agents.agent - INFO - Agent initial-0 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Registered internal agent initial-0
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Connected to internal agent initial-0
+2025-08-04 21:28:56,230 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-0
+2025-08-04 21:28:56,230 - orchestrator.agent_orchestrator - WARNING - Agent initial-1 failed health check, restarting...
+2025-08-04 21:28:56,230 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:56,230 - agents.agent - INFO - Agent initial-1 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Registered internal agent initial-1
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Connected to internal agent initial-1
+2025-08-04 21:28:56,230 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-1
+2025-08-04 21:28:56,230 - orchestrator.agent_orchestrator - WARNING - Agent initial-2 failed health check, restarting...
+2025-08-04 21:28:56,230 - tools.execution.factory - INFO - Created execution backend: native
+2025-08-04 21:28:56,230 - agents.agent - INFO - Agent initial-2 initialized with 23 tools (including Claude API)
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Registered internal agent initial-2
+2025-08-04 21:28:56,230 - transport.internal_agent - INFO - Connected to internal agent initial-2
+2025-08-04 21:28:56,230 - orchestrator.agent_orchestrator - INFO - Created internal agent initial-2

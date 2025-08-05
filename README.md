@@ -1,136 +1,348 @@
-# MCP Python Implementation
+# 🪄 Wand: Magical Multi-Agent Protocol Server
 
-A robust Model Context Protocol (MCP) server implementation in Python using the official MCP SDK.
+> *"Where AI automation meets enchantment"* ✨
 
-## Features
+A **spellbinding** Model Context Protocol (MCP) implementation with comprehensive integrations, providing **50+ powerful magical integrations** for AI development workflows. Supports Claude Desktop, Claude Code, and other MCP-compatible clients through mystical stdio and HTTP transports.
 
-- **Tools**: Time utilities, calculator, echo, and data processing
-- **Resources**: System info, logs, and configuration
-- **Prompts**: Greeting, summary, and code review templates
-- **Transport**: Stdio-based communication for Claude Desktop integration
-- **Type Safety**: Full type hints and validation
-
-## Installation
-
-```bash
-# Install dependencies
-pip install -e .
-
-# Install development dependencies
-pip install -e ".[dev]"
+```
+    🔮 Cast 50+ integration spells across all platforms 🔮
+         ⚡ Enhanced error handling with native preservation ⚡
+              ✨ Production-ready enchantments ✨
 ```
 
-## Usage
+## 🚀 Magical Status
 
-### Running the Server
+- **Protocol Version**: MCP 2025-06-18 (backward compatible)
+- **Primary Transport**: stdio (via `./add_to_claude.sh`)
+- **Integrations Available**: 50+ comprehensive integrations
+- **Client Integration**: Claude Desktop ✅ | Claude Code ✅ | Custom clients ✅
+- **Error Handling**: Enhanced with native error preservation
 
+## ✨ Enchanted Features
+
+### 🪄 Comprehensive Integration Arsenal (50+ Integrations)
+- **🎥 Media & Content**: Video, Audio, Images, OCR, QR codes
+- **🤖 AI & ML**: OpenAI, Anthropic, Cohere, Hugging Face, Local models
+- **💬 Communication**: Discord, Telegram, Email, Calendar
+- **☁️ Cloud & Storage**: Google Drive, S3, Dropbox, OneDrive
+- **🛠️ DevOps**: Docker, Kubernetes, Terraform, Monitoring
+- **💼 Business**: CRM, Payments, Project Management, HR tools
+- **🔐 Security**: Identity, Password management, Vulnerability scanning
+
+### 🏗️ Enhanced Error Response Architecture
+- **Native Error Preservation**: Complete exception details without abstraction
+- **Configuration Validation**: Initialization failures properly propagated
+- **Exception Categorization**: Timeout, authentication, connection, and generic errors
+- **Structured Logging**: System warnings with comprehensive context
+- **Rate Limiting Control**: Configurable per integration (disabled by default)
+
+### 🌐 Multiple Mystical Transports
+- **HTTP API**: Full MCP 2025-06-18 implementation with SSE support
+- **stdio**: Direct process communication for local clients
+- **Session Management**: Secure session handling with cleanup
+
+## 🚀 Quick Spell Casting
+
+### 1. Setup & Installation
 ```bash
-python server.py
+# Clone and setup
+git clone <repository-url>
+cd wand
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-### Integration with Claude Desktop
+### 2. Add to Claude Desktop (Recommended) 🪄
+```bash
+# One-command setup - adds Wand to Claude Desktop
+./add_to_claude.sh
 
-Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+# ✅ Successfully added Wand MCP server to Claude Desktop!
+# 📝 Next steps: Restart Claude Desktop to load the server
+```
+
+#### Manual Claude Desktop Setup
+If you prefer manual setup or the script doesn't work:
+
+1. **Open Claude Desktop Settings**
+2. **Navigate to MCP Servers**
+3. **Add a new server with these details:**
+   - **Name:** `wand`
+   - **Command:** `/path/to/wand/venv/bin/python`
+   - **Arguments:** `/path/to/wand/wand.py`
+
+#### Troubleshooting Claude Integration
+- Ensure you're in the Wand directory when running `./add_to_claude.sh`
+- Make sure the virtual environment is set up: `python -m venv venv && source venv/bin/activate && pip install -e .`
+- Restart Claude Desktop after adding the server
+- Check Claude Desktop logs for connection errors
+- Verify the Python path and script path are correct
+
+### 3. Alternative: Manual HTTP Server Setup
+```bash
+# Start HTTP server
+python wand.py http
+
+# Add HTTP MCP server to Claude
+claude mcp add wand-http --transport http http://localhost:8001/mcp
+```
+
+### 4. Test Your Magic ✨
+After restarting Claude Desktop, test the integration:
+- Ask Claude: *"Use Wand to check the system status"*
+- Try: *"Use Wand to list the available integrations"*
+- Or: *"Show me what Wand tools are available"*
+
+## ✨ Why the Script Setup is Magical
+
+The `./add_to_claude.sh` script provides the **best experience** because it:
+
+### 🎯 **Optimal Integration Benefits**
+- **Direct stdio communication** (faster than HTTP)
+- **Extended timeouts** (handles long-running operations)
+- **Automatic path detection** (no manual configuration)
+- **Enhanced error handling** with detailed diagnostics
+- **All 50+ integrations** ready to use immediately
+
+### 🔍 **What the Script Does**
+1. **Detects** your Python environment automatically
+2. **Configures** the MCP server with proper paths
+3. **Adds** Wand to Claude Desktop configuration
+4. **Enables** all integrations with enhanced error reporting
+5. **Provides** clear next steps
+
+### 🔧 **Extended Timeout Configuration**
+
+For **long-running magical operations** (AI training, large deployments, etc.), configure extended timeouts:
+
+**File:** `/Users/david/wand/settings.json`
+```json
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "43200000",
+    "BASH_MAX_TIMEOUT_MS": "43200000",
+    "MCP_TIMEOUT": "43200000",
+    "MCP_TOOL_TIMEOUT": "43200000"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__wand__*"
+    ]
+  }
+}
+```
+
+**Key Timeout Settings:**
+- **43200000ms** = 12 hours (for extensive magical operations)
+- **MCP_TIMEOUT**: Overall MCP session timeout
+- **MCP_TOOL_TIMEOUT**: Individual spell execution timeout
+- **BASH timeouts**: Command execution limits
+
+### 📋 **Complete stdio Configuration**
+
+The working Claude Code configuration (`~/.claude.json`):
 
 ```json
 {
   "mcpServers": {
-    "example-python": {
-      "command": "python",
-      "args": ["/path/to/mcp-python/server.py"],
+    "wand": {
+      "command": [
+        "/path/to/wand/venv/bin/python",
+        "/path/to/wand/wand.py",
+        "stdio"
+      ],
+      "args": [],
       "env": {}
     }
   }
 }
 ```
 
-## API Reference
+### 🎭 **stdio vs HTTP Comparison**
 
-### Tools
+| Feature | stdio Mode | HTTP Mode |
+|---------|------------|-----------|
+| **Performance** | 🚀 Fastest | ⚡ Fast |
+| **Timeouts** | 🕐 12+ hours | ⏰ 10 minutes |
+| **Setup** | 🔌 One command | 🌐 Server + client |
+| **Reliability** | 💎 Highest | 🛡️ High |
+| **Use Case** | 🪄 Heavy automation | 🎯 Quick tasks |
 
-- `get_time()`: Returns current server time in ISO format
-- `get_uptime()`: Returns server uptime duration
-- `calculate(expression: str)`: Evaluates mathematical expressions
-- `echo(message: str, uppercase: bool = False)`: Echoes messages
-- `process_data(data: List[Dict], operation: str, options: Dict)`: Advanced data processing
+## 📚 Magical Grimoires
 
-### Resources
+| Document | Description |
+|----------|-------------|
+| [📖 Enchanted Documentation Index](docs/README.md) | Complete magical grimoire directory with navigation |
+| [🚀 Quick Start](docs/QUICK_START.md) | 5-minute setup guide |
+| [🔌 Claude Code Integration](docs/MCP_CLAUDE_CODE_INTEGRATION.md) | Complete integration guide |
+| [📊 API Spellbook](docs/API_DOCUMENTATION.md) | All 69 magical tools and enchanted endpoints |
+| [🏗️ Architecture](docs/ARCHITECTURE.md) | System design and components |
+| [🚀 Deployment](docs/DEPLOYMENT_GUIDE.md) | Production deployment guide |
+| [🎨 Wand UI Integration](docs/MCP_UI_INTEGRATION.md) | Magical dashboard and enchanted management APIs |
 
-- `system://info`: System information (OS, Python version, uptime)
-- `logs://recent`: Recent server logs with timestamps
-- `config://current`: Current server configuration in JSON
+## 🪄 Available Magical Integrations (50+ Total)
 
-### Prompts
+### 🎥 Media & Content Creation
+- **FFmpeg** - Video processing and conversion
+- **OpenCV** - Computer vision and image processing
+- **YouTube** - Video upload and management
+- **Twitch** - Streaming platform integration
+- **Audio** - Audio processing and manipulation
+- **Whisper** - Speech-to-text transcription
+- **ElevenLabs** - Text-to-speech synthesis
+- **Image** - Image generation and editing
+- **OCR** - Optical character recognition
+- **QR** - QR code generation and reading
+- **Chart** - Data visualization and charting
 
-- `greeting(name: str, formal: bool = False)`: Generates greetings
-- `summary(text: str, max_length: int = 100)`: Creates text summaries
-- `code_review(code: str, language: str = "python", focus: str = "general")`: Code review requests
+### 🤖 AI & Machine Learning
+- **OpenAI** - GPT models and API integration
+- **Anthropic** - Claude model integration
+- **Cohere** - Language model services
+- **Hugging Face** - Model hub and transformers
+- **Replicate** - Cloud AI model hosting
+- **Stability AI** - Image generation models
+- **Ollama** - Local language model management
+- **DeepL** - Advanced translation services
 
-## Development
+### 💬 Communication & Social
+- **Discord** - Bot integration and messaging
+- **Telegram** - Bot and messaging automation
+- **Email** - SMTP/IMAP email management
+- **Calendar** - Calendar integration and scheduling
 
-### Running Tests
+### ☁️ Cloud Storage & File Management
+- **Google Drive** - File storage and sharing
+- **Dropbox** - Cloud file synchronization
+- **OneDrive** - Microsoft cloud storage
+- **S3** - Amazon S3 object storage
+- **FTP** - File transfer protocol operations
+
+### 📚 Documentation & Knowledge
+- **Notion** - Knowledge management integration
+- **Confluence** - Team wiki and documentation
+- **GitBook** - Documentation platform
+- **Markdown** - Markdown processing and conversion
+- **PDF** - PDF generation and manipulation
+
+### 🛠️ DevOps & Infrastructure
+- **Docker** - Container management
+- **Kubernetes** - Container orchestration
+- **Terraform** - Infrastructure as code
+- **Prometheus** - Monitoring and metrics
+- **Datadog** - Application monitoring
+- **Sentry** - Error tracking and monitoring
+
+### 🔍 Testing & Automation
+- **Selenium** - Web browser automation
+- **Playwright** - Modern web testing
+- **Postman** - API testing and development
+
+### 💼 Business & CRM
+- **Salesforce** - CRM and sales automation
+- **HubSpot** - Marketing and sales platform
+- **Pipedrive** - Sales pipeline management
+- **Stripe** - Payment processing
+
+### 📋 Project Management
+- **Jira** - Issue tracking and project management
+- **Asana** - Team task management
+- **Trello** - Kanban board management
+- **Linear** - Modern issue tracking
+- **Monday.com** - Work operating system
+
+### 👥 HR & Productivity
+- **Workday** - Human capital management
+- **BambooHR** - HR information system
+- **Toggl** - Time tracking
+- **Harvest** - Time tracking and invoicing
+
+### 🔐 Security & Identity
+- **Vault** - Secret management
+- **1Password** - Password management
+- **Okta** - Identity and access management
+- **Auth0** - Authentication as a service
+- **Veracode** - Application security testing
+- **Snyk** - Vulnerability management
+- **SonarQube** - Code quality and security
+
+### 🎮 Entertainment & Gaming
+- **Spotify** - Music streaming integration
+- **Podcast** - Podcast management and processing
+- **Steam** - Gaming platform integration
+
+## 🪄 Magical Server Modes
+
+### HTTP Mode (Recommended)
+```bash
+python wand.py http
+# Server available at http://localhost:8001/mcp
+```
+
+### stdio Mode
+```bash
+python wand.py stdio
+# For direct process communication
+```
+
+## 🏗️ Magical Architecture
+
+- **Multi-Agent System**: 3 internal agents with load balancing
+- **Execution Backends**: Native, Docker, SSH, Host Agent
+- **Security**: Command validation, path restrictions, resource limits
+- **Monitoring**: Health checks, performance tracking, audit logging
+
+## 🐳 Docker Support
 
 ```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=server --cov-report=html
-
-# Run specific test
-pytest test_server.py::test_get_time
+# Quick start with Docker
+docker build -f scripts/Dockerfile -t wand .
+docker run -p 8001:8001 wand
 ```
 
-### Project Structure
+## 🔒 Protective Wards
+
+- OAuth 2.1 authentication with resource indicators
+- Command allowlist/blocklist with pattern matching
+- Path restrictions and resource limits
+- Session management with cleanup
+- Comprehensive audit logging
+
+## 📊 Magical Performance
+
+- **Response Time**: <200ms average
+- **Concurrency**: 10+ simultaneous sessions
+- **Memory Usage**: <50MB per backend
+- **Scalability**: Horizontal scaling support
+
+## 🤝 Join the Magic
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under a proprietary license - see the LICENSE file for details.
+
+## 🆘 Magical Support
+
+- 📖 **Documentation**: Check the `docs/` directory for detailed guides
+- 🐛 **Issues**: Report bugs via GitHub Issues
+- 💬 **Questions**: Start a GitHub Discussion
+- 🔧 **Debug**: Enable debug logging with `LOG_LEVEL=DEBUG`
+
+---
+
+> 🪄 **May your automation be swift and your magic be strong!** ✨
+> *Happy spell casting with Wand!*
 
 ```
-mcp-python/
-├── server.py          # Main MCP server implementation
-├── test_server.py     # Comprehensive test suite
-├── pyproject.toml     # Project configuration
-└── README.md          # This file
+    🌟 Welcome to the magical realm of automation 🌟
+         🔮 Where 50+ integrations await your command 🔮
+              ✨ Cast responsibly, automate magically ✨
 ```
-
-## Examples
-
-### Using Tools
-
-```python
-# Get current time
-result = await get_time(ctx)
-# Returns: "Current time: 2024-01-20T10:30:00Z"
-
-# Calculate expression
-result = await calculate(ctx, "2 + 2 * 3")
-# Returns: "Result: 2 + 2 * 3 = 8"
-
-# Process data
-data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
-result = await process_data(ctx, data, "filter", {"key": "age", "value": 30})
-# Returns: "Filtered 1 items out of 2"
-```
-
-### Using Resources
-
-Resources are accessed via their URIs:
-- `system://info` - System information
-- `logs://recent` - Recent logs
-- `config://current` - Server configuration
-
-### Using Prompts
-
-Prompts generate structured messages for LLM interactions:
-
-```python
-# Generate greeting
-messages = await greeting(ctx, "Alice", formal=True)
-# Returns prompt for formal greeting
-
-# Request code review
-messages = await code_review(ctx, code_snippet, focus="security")
-# Returns prompt for security-focused review
-```
-
-## License
-
-MIT

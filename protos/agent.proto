@@ -1,0 +1,480 @@
+syntax = "proto3";
+
+package mcp;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// Core Types
+enum AgentType {
+  MANAGER = 0;
+  FRONTEND = 1;
+  BACKEND = 2;
+  DATABASE = 3;
+  DEVOPS = 4;
+  INTEGRATION = 5;
+  QA = 6;
+  HAYSTACK = 7;
+}
+
+enum TaskStatus {
+  PENDING = 0;
+  ASSIGNED = 1;
+  IN_PROGRESS = 2;
+  COMPLETED = 3;
+  FAILED = 4;
+  BLOCKED = 5;
+}
+
+enum TaskPriority {
+  CRITICAL = 0;
+  HIGH = 1;
+  MEDIUM = 2;
+  LOW = 3;
+}
+
+enum AgentStatus {
+  ONLINE = 0;
+  OFFLINE = 1;
+  BUSY = 2;
+  IDLE = 3;
+}
+
+// Core Messages
+message Task {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string type = 4;
+  TaskPriority priority = 5;
+  TaskStatus status = 6;
+  string assigned_to = 7;
+  repeated string dependencies = 8;
+  repeated string subtasks = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+  map<string, string> metadata = 12;
+}
+
+message Agent {
+  string id = 1;
+  string name = 2;
+  AgentType type = 3;
+  map<string, bool> capabilities = 4;
+  repeated string current_tasks = 5;
+  AgentStatus status = 6;
+  int32 max_concurrent_tasks = 7;
+  map<string, string> performance_metrics = 8;
+  int32 port = 9;
+}
+
+message Message {
+  string id = 1;
+  string from = 2;
+  string to = 3;
+  string type = 4;
+  string subject = 5;
+  map<string, string> content = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string reply_to = 8;
+  string correlation = 9;
+}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string requirements = 4;
+  map<string, string> tech_stack = 5;
+  TaskPriority priority = 6;
+  google.protobuf.Timestamp created_at = 7;
+  repeated string task_ids = 8;
+}
+
+// Service Definitions
+service AgentService {
+  // Task Management
+  rpc SubmitTask(SubmitTaskRequest) returns (TaskResponse);
+  rpc GetTaskStatus(TaskStatusRequest) returns (TaskStatusResponse);
+  rpc UpdateTaskStatus(UpdateTaskStatusRequest) returns (TaskResponse);
+  rpc GetAgentTasks(AgentTasksRequest) returns (AgentTasksResponse);
+
+  // Agent Communication
+  rpc SendMessage(SendMessageRequest) returns (MessageResponse);
+  rpc GetMessages(GetMessagesRequest) returns (stream Message);
+  rpc RequestCollaboration(CollaborationRequest) returns (CollaborationResponse);
+
+  // Health and Status
+  rpc GetAgentStatus(AgentStatusRequest) returns (AgentStatusResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+}
+
+service CoordinatorService {
+  // Task Distribution
+  rpc DistributeTask(DistributeTaskRequest) returns (TaskResponse);
+  rpc GetSystemStatus(SystemStatusRequest) returns (SystemStatusResponse);
+  rpc GetAllTasks(AllTasksRequest) returns (AllTasksResponse);
+  rpc GetAllAgents(AllAgentsRequest) returns (AllAgentsResponse);
+
+  // Agent Management
+  rpc RegisterAgent(RegisterAgentRequest) returns (RegisterAgentResponse);
+  rpc UnregisterAgent(UnregisterAgentRequest) returns (UnregisterAgentResponse);
+
+  // Project Coordination
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse);
+  rpc GetProjectStatus(ProjectStatusRequest) returns (ProjectStatusResponse);
+
+  // Task Dependencies
+  rpc CheckDependencies(CheckDependenciesRequest) returns (CheckDependenciesResponse);
+  rpc NotifyTaskCompletion(TaskCompletionNotification) returns (TaskCompletionResponse);
+}
+
+service IntegrationService {
+  // Integration Operations
+  rpc ExecuteSlackOperation(SlackOperationRequest) returns (IntegrationResponse);
+  rpc ExecuteGitOperation(GitOperationRequest) returns (IntegrationResponse);
+  rpc ExecuteAWSOperation(AWSOperationRequest) returns (IntegrationResponse);
+  rpc ExecuteJenkinsOperation(JenkinsOperationRequest) returns (IntegrationResponse);
+  rpc ExecuteYouTrackOperation(YouTrackOperationRequest) returns (IntegrationResponse);
+
+  // Integration Health
+  rpc GetIntegrationStatus(IntegrationStatusRequest) returns (IntegrationStatusResponse);
+  rpc TestIntegration(TestIntegrationRequest) returns (TestIntegrationResponse);
+  rpc ListIntegrations(ListIntegrationsRequest) returns (ListIntegrationsResponse);
+
+  // Haystack Operations
+  rpc ExecuteHaystackRAG(HaystackRAGRequest) returns (HaystackResponse);
+  rpc ExecuteHaystackSearch(HaystackSearchRequest) returns (HaystackResponse);
+  rpc IngestHaystackDocument(HaystackDocumentRequest) returns (HaystackResponse);
+}
+
+// Request/Response Messages
+message SubmitTaskRequest {
+  Task task = 1;
+  string target_agent_id = 2;
+}
+
+message TaskResponse {
+  string task_id = 1;
+  string status = 2;
+  string message = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message TaskStatusRequest {
+  string task_id = 1;
+}
+
+message TaskStatusResponse {
+  Task task = 1;
+  bool found = 2;
+}
+
+message UpdateTaskStatusRequest {
+  string task_id = 1;
+  TaskStatus status = 2;
+  map<string, string> metadata = 3;
+}
+
+message AgentTasksRequest {
+  string agent_id = 1;
+}
+
+message AgentTasksResponse {
+  repeated Task tasks = 1;
+}
+
+message SendMessageRequest {
+  Message message = 1;
+}
+
+message MessageResponse {
+  string message_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message GetMessagesRequest {
+  string agent_id = 1;
+  int32 limit = 2;
+}
+
+message CollaborationRequest {
+  string from_agent = 1;
+  string to_agent = 2;
+  string task_id = 3;
+  repeated string required_capabilities = 4;
+  map<string, string> context = 5;
+}
+
+message CollaborationResponse {
+  bool accepted = 1;
+  string message = 2;
+  map<string, string> shared_context = 3;
+}
+
+message AgentStatusRequest {
+  string agent_id = 1;
+}
+
+message AgentStatusResponse {
+  Agent agent = 1;
+  bool found = 2;
+}
+
+message HeartbeatRequest {
+  string agent_id = 1;
+}
+
+message HeartbeatResponse {
+  string agent_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// Coordinator Service Messages
+message DistributeTaskRequest {
+  Task task = 1;
+  string preferred_agent_type = 2;
+}
+
+message SystemStatusRequest {
+  bool include_metrics = 1;
+}
+
+message SystemStatusResponse {
+  int32 total_agents = 1;
+  int32 active_agents = 2;
+  int32 total_tasks = 3;
+  int32 completed_tasks = 4;
+  int32 failed_tasks = 5;
+  map<string, Agent> agent_statuses = 6;
+  map<string, int32> task_counts_by_status = 7;
+}
+
+message AllTasksRequest {
+  TaskStatus status_filter = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+message AllTasksResponse {
+  repeated Task tasks = 1;
+  int32 total_count = 2;
+}
+
+message AllAgentsRequest {
+  AgentType type_filter = 1;
+}
+
+message AllAgentsResponse {
+  repeated Agent agents = 1;
+}
+
+message RegisterAgentRequest {
+  Agent agent = 1;
+  int32 port = 2;
+}
+
+message RegisterAgentResponse {
+  bool success = 1;
+  string message = 2;
+  string agent_id = 3;
+}
+
+message UnregisterAgentRequest {
+  string agent_id = 1;
+}
+
+message UnregisterAgentResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CreateProjectRequest {
+  Project project = 1;
+}
+
+message CreateProjectResponse {
+  string project_id = 1;
+  int32 tasks_created = 2;
+  int32 tasks_distributed = 3;
+  repeated string task_ids = 4;
+}
+
+message ProjectStatusRequest {
+  string project_id = 1;
+}
+
+message ProjectStatusResponse {
+  Project project = 1;
+  string status = 2;
+  repeated Task tasks = 3;
+  float completion_percentage = 4;
+  map<string, int32> task_status_counts = 5;
+}
+
+message CheckDependenciesRequest {
+  string task_id = 1;
+}
+
+message CheckDependenciesResponse {
+  bool ready = 1;
+  repeated string pending_dependencies = 2;
+}
+
+message TaskCompletionNotification {
+  string task_id = 1;
+  string agent_id = 2;
+  TaskStatus final_status = 3;
+  map<string, string> result_metadata = 4;
+}
+
+message TaskCompletionResponse {
+  bool acknowledged = 1;
+  repeated string dependent_tasks_triggered = 2;
+}
+
+// Integration Service Messages
+message SlackOperationRequest {
+  string operation = 1;  // send_message, create_channel, etc.
+  map<string, string> parameters = 2;
+}
+
+message GitOperationRequest {
+  string operation = 1;  // create_pr, create_issue, etc.
+  map<string, string> parameters = 2;
+}
+
+message AWSOperationRequest {
+  string service = 1;  // ec2, s3, lambda
+  string operation = 2;  // start_instance, upload_file, etc.
+  map<string, string> parameters = 3;
+}
+
+message JenkinsOperationRequest {
+  string operation = 1;  // trigger_build, get_status, etc.
+  map<string, string> parameters = 2;
+}
+
+message YouTrackOperationRequest {
+  string operation = 1;  // create_issue, update_issue, etc.
+  map<string, string> parameters = 2;
+}
+
+message IntegrationResponse {
+  bool success = 1;
+  string message = 2;
+  map<string, string> result_data = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message IntegrationStatusRequest {
+  string integration_name = 1;
+}
+
+message IntegrationStatusResponse {
+  string integration_name = 1;
+  string status = 2;  // healthy, degraded, down
+  string message = 3;
+  google.protobuf.Timestamp last_check = 4;
+  map<string, string> metrics = 5;
+}
+
+message TestIntegrationRequest {
+  string integration_name = 1;
+  map<string, string> test_parameters = 2;
+}
+
+message TestIntegrationResponse {
+  bool success = 1;
+  string message = 2;
+  float response_time_ms = 3;
+}
+
+message ListIntegrationsRequest {
+  bool active_only = 1;
+}
+
+message ListIntegrationsResponse {
+  repeated string integration_names = 1;
+  map<string, IntegrationStatusResponse> statuses = 2;
+}
+
+// Haystack Service Messages
+message HaystackDocument {
+  string id = 1;
+  string filename = 2;
+  string content_type = 3;
+  string content = 4;
+  map<string, string> metadata = 5;
+  string embeddings_id = 6;
+  float relevance_score = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+message HaystackDocumentRequest {
+  string filename = 1;
+  string content_type = 2;
+  bytes content = 3;
+  map<string, string> metadata = 4;
+  string pipeline_id = 5;
+}
+
+message HaystackQueryRequest {
+  string pipeline_id = 1;
+  string query = 2;
+  map<string, string> parameters = 3;
+  int32 max_results = 4;
+  float temperature = 5;
+}
+
+message HaystackPipelineRequest {
+  string name = 1;
+  string type = 2; // 'rag', 'qa', 'search', 'summarization', 'custom'
+  map<string, string> configuration = 3;
+  bool is_active = 4;
+}
+
+message HaystackPipelineResponse {
+  string pipeline_id = 1;
+  string name = 2;
+  string type = 3;
+  string status = 4;
+  map<string, string> configuration = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message HaystackSearchRequest {
+  string query = 1;
+  string search_type = 2; // 'semantic', 'keyword', 'hybrid'
+  int32 max_results = 3;
+  map<string, string> filters = 4;
+}
+
+message HaystackRAGRequest {
+  string query = 1;
+  string pipeline_id = 2;
+  map<string, string> context = 3;
+  float temperature = 4;
+  int32 max_tokens = 5;
+}
+
+message HaystackResponse {
+  bool success = 1;
+  string message = 2;
+  string answer = 3;
+  repeated HaystackDocument sources = 4;
+  map<string, string> metadata = 5;
+  int32 execution_time_ms = 6;
+  int32 tokens_used = 7;
+  float cost_usd = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+message HaystackAnalyticsRequest {
+  string metric_type = 1; // 'queries', 'performance', 'costs'
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  map<string, string> filters = 4;
+}

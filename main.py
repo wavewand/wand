@@ -1,85 +1,124 @@
 #!/usr/bin/env python3
-"""Main entry point for running the Python MCP server with API."""
+"""
+MCP Distributed System - Main Entry Point
 
-import asyncio
+Start the complete distributed MCP system with all services.
+"""
+
 import argparse
-import threading
-import signal
-import sys
 import logging
-from typing import Optional
+import sys
+from pathlib import Path
 
-from api.server import run_server as run_api_server
-
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+from orchestrator.orchestrator import MCPSystemOrchestrator
 
 
-def run_mcp_server():
-    """Run the MCP server in a separate thread."""
-    import subprocess
-    try:
-        # Run the MCP server as a subprocess
-        proc = subprocess.Popen(
-            [sys.executable, "server.py"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        logger.info("MCP server started")
-        proc.wait()
-    except Exception as e:
-        logger.error(f"MCP server error: {e}")
+def setup_logging(log_level: str = "INFO"):
+    """Setup logging configuration."""
+    level = getattr(logging, log_level.upper(), logging.INFO)
 
+    # Create logs directory
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
 
-def signal_handler(sig, frame):
-    """Handle shutdown signals."""
-    logger.info("Shutting down...")
-    sys.exit(0)
+    # Configure logging
+    logging.basicConfig(
+        level=level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler(log_dir / "mcp_system.log", mode='a')],
+    )
+
+    # Reduce noise from some libraries
+    logging.getLogger('asyncio').setLevel(logging.WARNING)
+    logging.getLogger('grpc').setLevel(logging.WARNING)
 
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Python MCP Server with API")
-    parser.add_argument("--api-host", default="0.0.0.0", help="API server host")
-    parser.add_argument("--api-port", type=int, default=8000, help="API server port")
-    parser.add_argument("--mcp-only", action="store_true", help="Run only MCP server")
-    parser.add_argument("--api-only", action="store_true", help="Run only API server")
-    
+    parser = argparse.ArgumentParser(
+        description="MCP Distributed System - Multi-Agent Task Management Platform",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s                    # Start with default settings
+  %(prog)s --log-level DEBUG  # Start with debug logging
+  %(prog)s --status          # Show system status and exit
+
+Services Started:
+  - Coordinator (gRPC): Task distribution and management
+  - Integration Service (gRPC): External service integrations
+  - Agent Services (gRPC): Specialized worker agents
+  - REST API Gateway (HTTP): External API interface
+
+Visit http://localhost:8000/docs for API documentation.
+        """,
+    )
+
+    parser.add_argument(
+        '--log-level',
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        default='INFO',
+        help='Set logging level (default: INFO)',
+    )
+
+    parser.add_argument(
+        '--status', action='store_true', help='Show system status and exit (requires system to be running)'
+    )
+
     args = parser.parse_args()
-    
-    # Setup signal handler
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-    
+
+    # Setup logging
+    setup_logging(args.log_level)
+    logger = logging.getLogger("main")
+
+    if args.status:
+        # Show status and exit
+        try:
+            orchestrator = MCPSystemOrchestrator()
+            orchestrator.print_system_status()
+        except Exception as e:
+            print(f"Error getting system status: {e}")
+            sys.exit(1)
+        return
+
+    # Print banner
+    print_banner()
+
+    # Create and start orchestrator
+    orchestrator = MCPSystemOrchestrator()
+
     try:
-        if args.api_only:
-            # Run only API server
-            logger.info(f"Starting API server on {args.api_host}:{args.api_port}")
-            run_api_server(host=args.api_host, port=args.api_port)
-        elif args.mcp_only:
-            # Run only MCP server
-            logger.info("Starting MCP server...")
-            run_mcp_server()
-        else:
-            # Run both servers
-            # Start MCP server in a thread
-            mcp_thread = threading.Thread(target=run_mcp_server, daemon=True)
-            mcp_thread.start()
-            
-            # Run API server in main thread
-            logger.info(f"Starting API server on {args.api_host}:{args.api_port}")
-            run_api_server(host=args.api_host, port=args.api_port)
-            
+        logger.info("Starting MCP Distributed System...")
+        orchestrator.start_system()
     except KeyboardInterrupt:
-        logger.info("Received interrupt, shutting down...")
+        logger.info("Shutdown requested by user")
     except Exception as e:
-        logger.error(f"Server error: {e}")
+        logger.error(f"System startup failed: {e}")
         sys.exit(1)
+
+
+def print_banner():
+    """Print startup banner."""
+    banner = """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║                    MCP DISTRIBUTED SYSTEM v3.0.0                            ║
+║                                                                               ║
+║                Multi-Agent Context Protocol Platform                         ║
+║                     with gRPC + REST Architecture                           ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+Features:
+• 7 Specialized Agent Types (Manager, Frontend, Backend, Database, DevOps, Integration, QA)
+• gRPC-based Inter-Service Communication
+• REST API Gateway for External Access
+• Comprehensive Integration Suite (Slack, Git, AWS, Jenkins, YouTrack)
+• Real-time Task Distribution and Monitoring
+• Process Orchestration and Health Monitoring
+
+"""
+    print(banner)
 
 
 if __name__ == "__main__":

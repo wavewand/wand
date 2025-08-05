@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # MCP Distributed System Only
+  mcp-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-distributed-system
+    ports:
+      - "8000:8000"    # REST API
+      - "50051:50051"  # Coordinator gRPC
+      - "50200:50200"  # Integration gRPC
+      - "50100:50100"  # Manager Agent
+      - "50101:50101"  # Frontend Agent
+      - "50102:50102"  # Backend Agent
+      - "50103:50103"  # Database Agent
+      - "50104:50104"  # DevOps Agent
+      - "50105:50105"  # Integration Agent
+      - "50106:50106"  # QA Agent
+    environment:
+      - LOG_LEVEL=INFO
+      - COORDINATOR_PORT=50051
+      - INTEGRATION_PORT=50200
+      - REST_API_PORT=8000
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - mcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+networks:
+  mcp-network:
+    driver: bridge

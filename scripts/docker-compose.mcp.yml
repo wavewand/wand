@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mcp-python:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    container_name: mcp-python-server
+    privileged: true
+    ports:
+      - "8001:8000"
+    volumes:
+      # Mount the current directory as workspace
+      - "${PWD}:/workspace:rw"
+      # Mount host system directories for full access
+      - "/:/host:ro"
+      - "/tmp:/tmp:rw"
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+    environment:
+      - EXECUTION_MODE=privileged
+      - WORKING_DIRECTORY=/workspace
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+      - HOST=0.0.0.0
+      - PORT=8000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge

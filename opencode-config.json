@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "wand": {
+      "command": "python",
+      "args": ["distributed_server.py"],
+      "cwd": "{WAND_PATH}",
+      "env": {}
+    }
+  }
+}

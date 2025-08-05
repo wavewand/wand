@@ -1,0 +1,106 @@
+{
+  "server": {
+    "http_port": "8000",
+    "metrics_port": "9100",
+    "log_level": "info",
+    "version": "1.0.0",
+    "cors_enabled": true,
+    "cors_origins": ["http://localhost:3000", "http://localhost:8080"]
+  },
+  "database": {
+    "url": "sqlite:///app/data/wand.db",
+    "max_connections": 10,
+    "max_idle_conns": 5,
+    "conn_max_lifetime": 3600
+  },
+  "security": {
+    "enable_auth": false,
+    "jwt_secret": "wand-workspace-demo-key",
+    "enable_rate_limit": false,
+    "rate_limit": 1000,
+    "token_expiry": 3600
+  },
+  "execution": {
+    "mode": "volume_mount",
+    "default_timeout": 60,
+    "max_concurrent": 20,
+    "working_directory": "/workspace",
+    "audit_logging": true,
+    "security": {
+      "command_validation": true,
+      "path_restrictions": ["/workspace", "/tmp"],
+      "user_isolation": false,
+      "allowed_commands": [
+        "ls", "cat", "head", "tail", "grep", "find", "wc", "sort", "uniq",
+        "git", "npm", "node", "python", "python3", "pip", "pip3",
+        "docker", "docker-compose",
+        "curl", "wget", "jq",
+        "mkdir", "touch", "cp", "mv", "rm",
+        "chmod", "chown", "ln",
+        "tar", "zip", "unzip", "gzip", "gunzip",
+        "echo", "printf", "date", "whoami", "pwd", "which"
+      ],
+      "blocked_commands": [
+        "dd", "mkfs", "fdisk", "mount", "umount",
+        "su", "sudo", "passwd", "useradd", "userdel", "usermod",
+        "iptables", "ufw", "systemctl", "service"
+      ],
+      "max_memory": "4GB",
+      "max_cpu": "2.0",
+      "max_processes": 100,
+      "max_execution_time": 300
+    },
+    "volume_mount": {
+      "host_binary_path": "/usr/bin:/bin:/usr/local/bin",
+      "chroot_jail": false,
+      "bind_mounts": [
+        {"host": "${WORKSPACE_PATH}", "container": "/workspace", "mode": "rw"},
+        {"host": "/tmp", "container": "/tmp", "mode": "rw"}
+      ]
+    }
+  },
+  "integrations": {
+    "slack": {
+      "enabled": false
+    },
+    "git": {
+      "enabled": true,
+      "default_branch": "main",
+      "commit_author": "Wand Bot",
+      "commit_email": "wand-bot@example.com"
+    },
+    "jenkins": {
+      "enabled": false
+    },
+    "youtrack": {
+      "enabled": false
+    },
+    "aws": {
+      "enabled": false
+    },
+    "postgres": {
+      "enabled": false
+    },
+    "bambu": {
+      "enabled": false
+    },
+    "web": {
+      "enabled": true,
+      "timeout": 30
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "prometheus_endpoint": "/metrics",
+    "collect_interval": 15,
+    "retention_days": 7
+  },
+  "distributed": {
+    "max_concurrent_tasks": 50,
+    "task_queue_size": 500,
+    "message_queue_size": 500,
+    "worker_pool_size": 20,
+    "heartbeat_interval": 30,
+    "task_timeout": 600
+  }
+}
