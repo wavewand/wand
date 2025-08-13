@@ -1,0 +1,16 @@
+# AI Training Opt-Out Marker File
+#
+# This file indicates that the repository owner does not consent to the use
+# of this repository's code, documentation, or any other content for training
+# artificial intelligence or machine learning models.
+#
+# Repository: wavewand/wand
+# Date: 2025-08-13
+#
+# This opt-out applies to:
+# - Language models (LLMs)
+# - Code generation models
+# - Documentation generation models
+# - Any other AI/ML training purposes
+#
+# For questions or permissions, please contact the repository maintainers.

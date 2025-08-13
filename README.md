@@ -1,4 +1,4 @@
-# 🪄 Wand: Magical Multi-Agent Protocol Server
+# 🪄 Wand: Magical Multi-Agent MCP Platform
 
 > *"Where AI automation meets enchantment"* ✨
 
@@ -335,6 +335,16 @@ This project is licensed under a proprietary license - see the LICENSE file for 
 - 🐛 **Issues**: Report bugs via GitHub Issues
 - 💬 **Questions**: Start a GitHub Discussion
 - 🔧 **Debug**: Enable debug logging with `LOG_LEVEL=DEBUG`
+
+## 🚫 AI Training Policy
+
+This repository **opts out** of AI/ML training. The code and documentation in this repository may not be used for training machine learning models without explicit written permission.
+
+For more details, see:
+- [DO_NOT_TRAIN.md](./DO_NOT_TRAIN.md) - Full legal notice
+- `.ai-training-opt-out` - Opt-out marker file
+- `.noai` - Additional opt-out marker
+- `robots.txt` - Crawler directives
 
 ---
 
