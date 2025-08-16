@@ -1564,6 +1564,227 @@ async def create_orchestrator_stdio_server(orchestrator: AgentOrchestrator) -> F
         )
         return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
 
+    # 🏢 Enterprise Identity Management Tools
+    @mcp_server.tool(
+        name="servicenow",
+        description="ServiceNow IT Service Management (create incidents, query records, manage users)",
+        annotations=ToolAnnotations(category="enterprise"),
+    )
+    async def servicenow(
+        operation: Literal[
+            "create_incident", "query_records", "update_record", "get_user", "create_user", "list_tables"
+        ],
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """ServiceNow IT Service Management operations
+
+        Args:
+            operation: ServiceNow operation to perform
+            **kwargs: Operation-specific parameters
+                For create_incident: short_description (required), description, priority, assigned_to
+                For query_records: table (default: incident), limit, query_filter
+                For update_record: table, sys_id (required), field updates
+                For get_user: user_id, username, or email
+                For create_user: user_name, first_name, last_name, email (all required)
+                For list_tables: limit (default: 50)
+
+        Examples:
+            servicenow(operation="create_incident", short_description="Server down", priority="1")
+            servicenow(operation="query_records", table="incident", limit=5)
+            servicenow(operation="get_user", username="john.doe")
+        """
+        from integrations.enterprise.identity_management import ServiceNowIntegration
+
+        final_kwargs = process_kwargs_dual_mode(**kwargs)
+
+        # Create integration instance
+        integration = ServiceNowIntegration()
+        await integration.initialize()
+
+        try:
+            result = await integration.execute_operation(operation, **final_kwargs)
+            return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
+        finally:
+            await integration.cleanup()
+
+    @mcp_server.tool(
+        name="sailpoint",
+        description="SailPoint Identity Security Cloud (manage identities, request access, launch campaigns)",
+        annotations=ToolAnnotations(category="enterprise"),
+    )
+    async def sailpoint(
+        operation: Literal[
+            "get_identities", "get_identity", "request_access", "get_accounts", "launch_campaign", "get_access_profiles"
+        ],
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """SailPoint IdentityNow operations
+
+        Args:
+            operation: SailPoint operation to perform
+            **kwargs: Operation-specific parameters
+                For get_identities: limit (default: 10), filters
+                For get_identity: identity_id (required)
+                For request_access: identity_id (required), access_profile_ids (required), justification
+                For get_accounts: limit (default: 10), filters
+                For launch_campaign: campaign_name (required), description, identities
+                For get_access_profiles: limit (default: 10), filters
+
+        Examples:
+            sailpoint(operation="get_identities", limit=20)
+            sailpoint(operation="request_access", identity_id="123", access_profile_ids=["prof1", "prof2"])
+            sailpoint(operation="launch_campaign", campaign_name="Q1 Review", description="Quarterly access review")
+        """
+        from integrations.enterprise.identity_management import SailPointIntegration
+
+        final_kwargs = process_kwargs_dual_mode(**kwargs)
+
+        # Create integration instance
+        integration = SailPointIntegration()
+        await integration.initialize()
+
+        try:
+            result = await integration.execute_operation(operation, **final_kwargs)
+            return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
+        finally:
+            await integration.cleanup()
+
+    @mcp_server.tool(
+        name="entra",
+        description="Microsoft Entra (Azure AD) identity management (users, groups, roles)",
+        annotations=ToolAnnotations(category="enterprise"),
+    )
+    async def entra(
+        operation: Literal[
+            "get_users",
+            "get_user",
+            "create_user",
+            "assign_role",
+            "get_groups",
+            "get_group_members",
+            "add_user_to_group",
+        ],
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """Microsoft Entra (Azure AD) operations
+
+        Args:
+            operation: Entra operation to perform
+            **kwargs: Operation-specific parameters
+                For get_users: limit (default: 10), filter
+                For get_user: user_id or user_principal_name (required)
+                For create_user: userPrincipalName, displayName, passwordProfile (all required)
+                For assign_role: user_id, role_id (both required)
+                For get_groups: limit (default: 10), filter
+                For get_group_members: group_id (required)
+                For add_user_to_group: user_id, group_id (both required)
+
+        Examples:
+            entra(operation="get_users", limit=50)
+            entra(operation="get_user", user_principal_name="john@company.com")
+            entra(operation="create_user", userPrincipalName="jane@company.com", displayName="Jane Doe", passwordProfile={"password": "TempPass123!", "forceChangePasswordNextSignIn": True})
+        """
+        from integrations.enterprise.identity_management import MicrosoftEntraIntegration
+
+        final_kwargs = process_kwargs_dual_mode(**kwargs)
+
+        # Create integration instance
+        integration = MicrosoftEntraIntegration()
+        await integration.initialize()
+
+        try:
+            result = await integration.execute_operation(operation, **final_kwargs)
+            return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
+        finally:
+            await integration.cleanup()
+
+    @mcp_server.tool(
+        name="britive",
+        description="Britive privileged access management (profiles, access requests, secrets)",
+        annotations=ToolAnnotations(category="enterprise"),
+    )
+    async def britive(
+        operation: Literal[
+            "list_profiles",
+            "request_access",
+            "checkout_secret",
+            "approve_request",
+            "get_my_requests",
+            "get_user_permissions",
+        ],
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """Britive cloud privileged access management operations
+
+        Args:
+            operation: Britive operation to perform
+            **kwargs: Operation-specific parameters
+                For list_profiles: limit (default: 10), application_id
+                For request_access: profile_id (required), justification, duration (minutes)
+                For checkout_secret: secret_id (required), profile_id
+                For approve_request: request_id (required), comment
+                For get_my_requests: status (default: pending), limit (default: 10)
+                For get_user_permissions: user_id (optional, uses current user if not provided)
+
+        Examples:
+            britive(operation="list_profiles", limit=20)
+            britive(operation="request_access", profile_id="prof123", justification="Emergency database access", duration=60)
+            britive(operation="get_my_requests", status="pending")
+        """
+        from integrations.enterprise.identity_management import BritiveIntegration
+
+        final_kwargs = process_kwargs_dual_mode(**kwargs)
+
+        # Create integration instance
+        integration = BritiveIntegration()
+        await integration.initialize()
+
+        try:
+            result = await integration.execute_operation(operation, **final_kwargs)
+            return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
+        finally:
+            await integration.cleanup()
+
+    # 💬 Microsoft Teams Communication Tools
+    @mcp_server.tool(
+        name="teams",
+        description="Microsoft Teams messaging (send messages, cards, notifications via webhooks)",
+        annotations=ToolAnnotations(category="communication"),
+    )
+    async def teams(
+        operation: Literal["send_message", "send_card", "send_notification", "list_webhooks", "add_webhook"],
+        **kwargs,
+    ) -> Dict[str, Any]:
+        """Microsoft Teams communication operations
+
+        Args:
+            operation: Teams operation to perform
+            **kwargs: Operation-specific parameters
+                For send_message: message/text (required), channel (default: default), webhook_url
+                For send_card: card (dict/JSON), title, summary, channel, theme_color, sections, facts, actions
+                For send_notification: title (required), message, status (success/warning/error/info), details, channel
+                For list_webhooks: (no parameters)
+                For add_webhook: channel (required), webhook_url (required)
+
+        Examples:
+            teams(operation="send_message", message="Hello from Wand!", channel="general")
+            teams(operation="send_notification", title="Server Alert", message="CPU usage high", status="warning")
+            teams(operation="send_card", title="Status Report", sections=[{"text": "All systems operational"}], theme_color="28a745")
+        """
+        from integrations.productivity.teams_communication import MicrosoftTeamsIntegration
+
+        final_kwargs = process_kwargs_dual_mode(**kwargs)
+
+        # Create integration instance
+        integration = MicrosoftTeamsIntegration()
+        await integration.initialize()
+
+        try:
+            result = await integration.execute_operation(operation, **final_kwargs)
+            return result if isinstance(result, dict) else {"status": "completed", "result": str(result)}
+        finally:
+            await integration.cleanup()
+
     return mcp_server
 
 

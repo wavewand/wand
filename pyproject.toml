@@ -69,6 +69,14 @@ enterprise = [
     "stripe>=7.7.0",
     "jira>=3.5.0",
     "asana>=3.2.0",
+    # Identity Management
+    "pysnc>=1.1.6",  # ServiceNow
+    "msal>=1.24.0",  # Microsoft Authentication
+    "msgraph-sdk>=1.0.0",  # Microsoft Graph
+    "azure-identity>=1.14.0",  # Azure Identity
+    "britive>=2.0.0",  # Britive PAM
+    # Communication
+    "pymsteams>=0.2.2",  # Microsoft Teams
 ]
 monitoring = [
     "prometheus-client>=0.19.0",
