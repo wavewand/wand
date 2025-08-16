@@ -443,13 +443,72 @@ docker run -p 8001:8001 wand
 - **Memory Usage**: <50MB per backend
 - **Scalability**: Horizontal scaling support
 
+## 🧪 Local CI & Testing
+
+Wand includes a comprehensive local CI system that mirrors the GitHub Actions pipeline, helping you catch issues before pushing code.
+
+### Quick Testing
+```bash
+# Run the full CI pipeline (recommended before every commit)
+./ci.sh
+
+# Run only enterprise integration tests
+./ci.sh --enterprise
+
+# Run with verbose output for detailed logs
+./ci.sh --enterprise --verbose
+
+# Setup environment only
+./ci.sh --setup
+```
+
+### Available Test Modes
+- `./ci.sh` - Full CI pipeline (setup + all checks + tests)
+- `./ci.sh --enterprise` - Enterprise integration tests only
+- `./ci.sh --basic` - Basic tests (no external dependencies)
+- `./ci.sh --tests-only` - All tests without setup
+- `./ci.sh --lint-only` - Code linting only
+- `./ci.sh --security-only` - Security scans only
+
+### CI Pipeline Features
+- **Environment Setup**: Automatic virtual environment management
+- **Dependency Management**: Installs required and optional dependencies
+- **Enterprise Integration Testing**: Tests for ServiceNow, SailPoint, Microsoft Entra, Britive, Teams
+- **Code Quality**: Linting (ruff), type checking (mypy), security scanning (bandit, safety)
+- **Smart Dependencies**: Gracefully handles missing optional enterprise packages
+- **Colored Output**: Clear, colored logging for easy reading
+
+### Enterprise Integration Tests
+The enterprise tests are designed for CI environments:
+- **With Dependencies**: Full integration tests with proper mocking
+- **Without Dependencies**: Tests automatically skip with descriptive messages
+- **Expected Skips**: `pysnc` (ServiceNow), `azure-identity` (Entra), `britive` (PAM)
+
+### Before Committing
+```bash
+# Always run CI to catch issues early
+./ci.sh
+
+# If enterprise tests fail, investigate with verbose output
+./ci.sh --enterprise --verbose
+```
+
 ## 🤝 Join the Magic
 
+### Development Workflow
+1. **Setup**: Run `./ci.sh --setup` to prepare your environment
+2. **Development**: Use `./ci.sh --tests-only` for quick feedback
+3. **Before committing**: Run `./ci.sh` to ensure all checks pass
+4. **Code quality**: Use `./ci.sh --lint-only` to fix style issues
+
+### Contributing Steps
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Set up development environment (`./ci.sh --setup`)
+4. Make your changes and test (`./ci.sh`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## 📄 License
 
