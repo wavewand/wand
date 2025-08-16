@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Wand Integration System is a comprehensive magical toolkit providing 50+ integrations across 7 categories. Each integration follows enterprise-grade patterns with authentication management, rate limiting, caching, and error handling.
+The Wand Integration System is a comprehensive magical toolkit providing 55+ integrations across 7 categories. Each integration follows enterprise-grade patterns with authentication management, rate limiting, caching, and error handling.
 
 ## Architecture
 
@@ -19,7 +19,7 @@ The Wand Integration System is a comprehensive magical toolkit providing 50+ int
 ├── 🤖 AI/ML (7 integrations)
 ├── 🌐 Productivity (5 integrations)
 ├── 🛠 DevTools (3 integrations)
-├── 🏢 Enterprise (12 integrations)
+├── 🏢 Enterprise (17 integrations)
 ├── 🔒 Security (6 integrations)
 ├── 🎮 Specialized (12 integrations)
 └── 🔄 Legacy (9 integrations)
@@ -72,6 +72,15 @@ The Wand Integration System is a comprehensive magical toolkit providing 50+ int
 - `terraform` - Infrastructure as code
 
 ### 🏢 Enterprise Integrations
+
+**Identity & Access Management**
+- `servicenow` - IT Service Management, incident tracking, user management
+- `sailpoint` - Identity Security Cloud, access governance, certification campaigns
+- `entra` - Microsoft Entra (Azure AD) user/group/role management
+- `britive` - Privileged access management, just-in-time access, secret checkout
+
+**Communication & Collaboration**
+- `teams` - Microsoft Teams messaging, cards, notifications via webhooks
 
 **CRM & Sales**
 - `salesforce` - Lead management, opportunities

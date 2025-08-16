@@ -7,12 +7,13 @@ This guide provides comprehensive configuration information for the MCP Python p
 ## Table of Contents
 
 1. [Environment Configuration](#environment-configuration)
-2. [Agent Configuration](#agent-configuration)
-3. [Claude Code Configuration](#claude-code-configuration)
-4. [Docker Configuration](#docker-configuration)
-5. [Database Configuration](#database-configuration)
-6. [Security Configuration](#security-configuration)
-7. [Monitoring Configuration](#monitoring-configuration)
+2. [Enterprise Integration Configuration](#enterprise-integration-configuration)
+3. [Agent Configuration](#agent-configuration)
+4. [Claude Code Configuration](#claude-code-configuration)
+5. [Docker Configuration](#docker-configuration)
+6. [Database Configuration](#database-configuration)
+7. [Security Configuration](#security-configuration)
+8. [Monitoring Configuration](#monitoring-configuration)
 
 ## Environment Configuration
 
@@ -46,6 +47,27 @@ OPENAI_API_KEY=your_openai_api_key
 ANTHROPIC_API_KEY=your_anthropic_api_key
 COHERE_API_KEY=your_cohere_api_key
 HUGGINGFACE_API_KEY=your_huggingface_api_key
+
+# Enterprise Identity Management
+SERVICENOW_INSTANCE_URL=https://your-instance.service-now.com
+SERVICENOW_USERNAME=your_servicenow_username
+SERVICENOW_PASSWORD=your_servicenow_password
+
+SAILPOINT_BASE_URL=https://your-tenant.api.identitynow.com
+SAILPOINT_CLIENT_ID=your_sailpoint_client_id
+SAILPOINT_CLIENT_SECRET=your_sailpoint_client_secret
+
+AZURE_TENANT_ID=your_azure_tenant_id
+AZURE_CLIENT_ID=your_azure_client_id
+AZURE_CLIENT_SECRET=your_azure_client_secret
+
+BRITIVE_TENANT=your_britive_tenant
+BRITIVE_API_TOKEN=your_britive_api_token
+
+# Microsoft Teams Communication
+TEAMS_WEBHOOK_URL=https://your-org.webhook.office.com/webhookb2/default-channel
+TEAMS_WEBHOOK_GENERAL=https://your-org.webhook.office.com/webhookb2/general-channel
+TEAMS_WEBHOOK_ALERTS=https://your-org.webhook.office.com/webhookb2/alerts-channel
 
 # Framework Configuration
 HAYSTACK_API_KEY=your_haystack_api_key
@@ -105,6 +127,141 @@ environment:
   ENABLE_METRICS: ${ENABLE_METRICS:-true}
   METRICS_PORT: 9090
 ```
+
+## Enterprise Integration Configuration
+
+### Overview
+
+Wand includes comprehensive enterprise identity management and communication integrations. This section covers configuration for ServiceNow, SailPoint, Microsoft Entra, Britive, and Microsoft Teams integrations.
+
+### ServiceNow Configuration
+
+ServiceNow integration requires instance URL and authentication credentials:
+
+```bash
+# ServiceNow ITSM Configuration
+SERVICENOW_INSTANCE_URL=https://your-instance.service-now.com
+SERVICENOW_USERNAME=your_integration_user
+SERVICENOW_PASSWORD=your_integration_password
+```
+
+**Required Permissions:**
+- `itil` role for incident management
+- `admin` role for user management
+- `table_api` access for record operations
+
+### SailPoint Identity Security Cloud Configuration
+
+SailPoint integration uses OAuth2 client credentials:
+
+```bash
+# SailPoint IdentityNow Configuration
+SAILPOINT_BASE_URL=https://your-tenant.api.identitynow.com
+SAILPOINT_CLIENT_ID=your_client_id
+SAILPOINT_CLIENT_SECRET=your_client_secret
+```
+
+**Setup Steps:**
+1. Create API client in SailPoint Admin Console
+2. Grant required scopes: `sp:scopes:all` or specific API permissions
+3. Note the tenant-specific base URL format
+
+### Microsoft Entra (Azure AD) Configuration
+
+Microsoft Entra integration requires Azure AD app registration:
+
+```bash
+# Microsoft Entra Identity Configuration
+AZURE_TENANT_ID=your_tenant_id
+AZURE_CLIENT_ID=your_app_client_id
+AZURE_CLIENT_SECRET=your_app_client_secret
+```
+
+**Azure App Registration:**
+1. Register app in Azure Portal → App Registrations
+2. Grant API permissions:
+   - `User.Read.All`
+   - `Group.Read.All`
+   - `Directory.Read.All`
+   - `RoleManagement.ReadWrite.Directory` (for role assignments)
+3. Create client secret and note tenant ID
+
+### Britive Privileged Access Management Configuration
+
+Britive integration uses tenant name and API token:
+
+```bash
+# Britive PAM Configuration
+BRITIVE_TENANT=your_tenant_name
+BRITIVE_API_TOKEN=your_api_token
+```
+
+**Setup Steps:**
+1. Generate API token in Britive console
+2. Ensure token has required permissions for profiles and access requests
+3. Tenant name is the subdomain in your Britive URL
+
+### Microsoft Teams Communication Configuration
+
+Teams integration uses incoming webhooks for channel messaging:
+
+```bash
+# Microsoft Teams Webhook Configuration
+TEAMS_WEBHOOK_URL=https://your-org.webhook.office.com/webhookb2/default
+TEAMS_WEBHOOK_GENERAL=https://your-org.webhook.office.com/webhookb2/general
+TEAMS_WEBHOOK_ALERTS=https://your-org.webhook.office.com/webhookb2/alerts
+```
+
+**Webhook Setup:**
+1. Go to Teams channel → "..." menu → "Connectors"
+2. Find "Incoming Webhook" and configure
+3. Copy webhook URL for each channel
+4. Use environment variables with pattern: `TEAMS_WEBHOOK_CHANNELNAME`
+
+### Enterprise Integration Health Checks
+
+Test your enterprise integrations:
+
+```bash
+# Test ServiceNow connection
+curl -X POST http://localhost:8001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"method": "tools/call", "params": {"name": "servicenow", "arguments": {"operation": "health_check"}}}'
+
+# Test Teams webhook
+curl -X POST http://localhost:8001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"method": "tools/call", "params": {"name": "teams", "arguments": {"operation": "send_message", "message": "Test from Wand"}}}'
+```
+
+### Enterprise Security Best Practices
+
+1. **Use Service Accounts**: Create dedicated service accounts for integrations
+2. **Rotate Credentials**: Implement regular credential rotation
+3. **Least Privilege**: Grant only necessary permissions
+4. **Monitor Access**: Enable audit logging in enterprise systems
+5. **Secure Storage**: Use secure credential storage (Azure Key Vault, etc.)
+
+### Troubleshooting Enterprise Integrations
+
+**Common Issues:**
+
+1. **Authentication Failures**
+   - Verify credentials and expiration dates
+   - Check required permissions in source systems
+   - Test connectivity to service endpoints
+
+2. **Rate Limiting**
+   - Review service-specific rate limits
+   - Implement appropriate delays between requests
+   - Consider upgrading service plans if needed
+
+3. **Network Connectivity**
+   - Verify firewall rules and proxy settings
+   - Test direct connectivity to service endpoints
+   - Check SSL/TLS certificate trust
+
+For detailed usage examples, see [Enterprise Integrations Guide](ENTERPRISE_INTEGRATIONS.md).
 
 ## Agent Configuration
 

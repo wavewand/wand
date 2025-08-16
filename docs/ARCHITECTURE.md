@@ -1,96 +1,103 @@
-# MCP-Python Architecture
+# Wand Architecture
 
 ## System Overview
 
-MCP-Python is a comprehensive Model Context Protocol implementation providing a bridge between AI development tools (Claude Code, OpenCode) and system execution capabilities through a multi-agent orchestrator architecture.
+Wand is a Model Context Protocol (MCP) server that provides a unified interface for 55+ integrations, enabling AI agents to interact with various services and tools. Built on a comprehensive MCP implementation, Wand provides a bridge between AI development tools (Claude Code, OpenCode) and system execution capabilities through a multi-agent orchestrator architecture.
 
 ## High-Level Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Claude Code   │    │    OpenCode     │    │  Other Clients  │
-│                 │    │                 │    │                 │
-└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
-          │                      │                      │
-          └──────────────────────┼──────────────────────┘
-                                 │
-                    ┌─────────────▼──────────────┐
-                    │       MCP Protocol         │
-                    │    (JSON-RPC 2.0 over     │
-                    │    HTTP/stdio/SSE)         │
-                    └─────────────┬──────────────┘
-                                 │
-                    ┌─────────────▼──────────────┐
-                    │    Transport Layer         │
-                    │  ┌─────────────────────┐   │
-                    │  │  HTTP Transport     │   │
-                    │  │  (FastAPI)          │   │
-                    │  └─────────────────────┘   │
-                    │  ┌─────────────────────┐   │
-                    │  │  stdio Transport    │   │
-                    │  │  (FastMCP)          │   │
-                    │  └─────────────────────┘   │
-                    │  ┌─────────────────────┐   │
-                    │  │  SSE Transport      │   │
-                    │  │  (Server-Sent Events)  │
-                    │  └─────────────────────┘   │
-                    └─────────────┬──────────────┘
-                                 │
-                    ┌─────────────▼──────────────┐
-                    │   Agent Orchestrator       │
-                    │                            │
-                    │  ┌─────────────────────┐   │
-                    │  │    Agent Pool       │   │
-                    │  │  ┌─────┐ ┌─────┐    │   │
-                    │  │  │Agent│ │Agent│    │   │
-                    │  │  │  1  │ │  2  │ ..│   │
-                    │  │  │23tls│ │23tls│    │   │
-                    │  │  └─────┘ └─────┘    │   │
-                    │  └─────────────────────┘   │
-                    │                            │
-                    │  ┌─────────────────────┐   │
-                    │  │   Task Manager      │   │
-                    │  │   Load Balancing    │   │
-                    │  │   Health Monitoring │   │
-                    │  └─────────────────────┘   │
-                    └─────────────┬──────────────┘
-                                 │
-                    ┌─────────────▼──────────────┐
-                    │    Execution Layer         │
-                    │                            │
-                    │  ┌─────────────────────┐   │
-                    │  │  Native Backend     │   │
-                    │  │  (Direct Execution) │   │
-                    │  └─────────────────────┘   │
-                    │  ┌─────────────────────┐   │
-                    │  │  Docker Backend     │   │
-                    │  │  (Container Exec)   │   │
-                    │  └─────────────────────┘   │
-                    │  ┌─────────────────────┐   │
-                    │  │  SSH Backend        │   │
-                    │  │  (Remote Execution) │   │
-                    │  └─────────────────────┘   │
-                    │  ┌─────────────────────┐   │
-                    │  │  Host Agent Backend │   │
-                    │  │  (Privileged Service)  │
-                    │  └─────────────────────┘   │
-                    └─────────────┬──────────────┘
-                                 │
-                    ┌─────────────▼──────────────┐
-                    │      System Layer          │
-                    │                            │
-                    │  File System • Network     │
-                    │  Processes • Services      │
-                    │  Databases • APIs          │
-                    │  Cloud Resources           │
-                    └────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                CLIENT LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Claude Desktop    Claude Code    Other MCP Clients    Web Dashboard        │
+│       ↓                ↓                ↓                    ↓              │
+└───────┼────────────────┼────────────────┼────────────────────┼──────────────┘
+        ↓                ↓                ↓                    ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              TRANSPORT LAYER                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│     stdio           stdio         HTTP/SSE            WebSocket              │
+│   (process)       (process)        (REST)             (realtime)            │
+└───────┼────────────────┼────────────────┼────────────────────┼──────────────┘
+        ↓                ↓                ↓                    ↓
+        └────────────────┴────────────────┴────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            MCP SERVER CORE                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌──────────────┐     ┌──────────────────┐     ┌────────────────┐        │
+│   │  MCP Main    │────▶│   Orchestrator   │────▶│  Task Manager  │        │
+│   │   Server     │     │     Manager      │     │                │        │
+│   └──────────────┘     └──────────────────┘     └────────────────┘        │
+│          │                      │                        │                 │
+│          │                      ↓                        ↓                 │
+│          │              ┌──────────────┐      ┌──────────────────┐        │
+│          │              │Agent Manager │      │Execution Backends│        │
+│          │              └──────────────┘      └──────────────────┘        │
+└──────────┼──────────────────────────────────────────────────────────────────┘
+           │
+           ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           INTEGRATION LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────┐  ┌─────────────────────┐  ┌──────────────────┐  │
+│  │      AI/ML          │  │      DevOps         │  │  Communication   │  │
+│  ├─────────────────────┤  ├─────────────────────┤  ├──────────────────┤  │
+│  │ • Ollama            │  │ • Docker            │  │ • Slack          │  │
+│  │ • OpenAI           │  │ • Kubernetes        │  │ • Telegram       │  │
+│  │ • Anthropic        │  │ • Git/GitHub        │  │ • Email          │  │
+│  │ • Cohere           │  │ • Jenkins           │  │ • Discord        │  │
+│  │ • HuggingFace      │  │ • Terraform         │  │ • Teams          │  │
+│  └─────────────────────┘  └─────────────────────┘  └──────────────────┘  │
+│                                                                             │
+│  ┌─────────────────────┐  ┌─────────────────────┐  ┌──────────────────┐  │
+│  │   Cloud Storage     │  │     Business        │  │    Security      │  │
+│  ├─────────────────────┤  ├─────────────────────┤  ├──────────────────┤  │
+│  │ • AWS S3            │  │ • CRM Systems       │  │ • Auth providers │  │
+│  │ • Google Drive      │  │ • Payment APIs      │  │ • Vault          │  │
+│  │ • Dropbox           │  │ • Project Mgmt      │  │ • Security scan  │  │
+│  │ • OneDrive          │  │ • HR Tools          │  │ • ServiceNow     │  │
+│  │                     │  │                     │  │ • SailPoint      │  │
+│  │                     │  │                     │  │ • Entra          │  │
+│  │                     │  │                     │  │ • Britive        │  │
+│  └─────────────────────┘  └─────────────────────┘  └──────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+           │
+           ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           EXECUTION LAYER                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │   Native     │  │Docker Socket │  │ SSH Remote   │  │ Host Agent   │  │
+│  │  Execution   │  │  Container   │  │   Server     │  │  Privileged  │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+           │
+           ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              DATA LAYER                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │  PostgreSQL  │  │  File System │  │Vector Store  │  │    Cache     │  │
+│  │   Database   │  │   Storage    │  │ (Embeddings) │  │   (Redis)    │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Core Components
 
-### 1. Transport Layer
+### Client Layer
+- **Claude Desktop/Code**: Primary MCP clients using stdio transport
+- **MCP Clients**: Third-party clients using HTTP/WebSocket
 
-#### HTTP Transport (`transport/mcp_http.py`)
+### Transport Layer
+
+#### 1. HTTP Transport (`transport/mcp_http.py`)
 - **Framework**: FastAPI with CORS support
 - **Protocol**: MCP 2025-06-18 via JSON-RPC 2.0
 - **Endpoints**:
@@ -99,33 +106,93 @@ MCP-Python is a comprehensive Model Context Protocol implementation providing a 
   - `DELETE /mcp` - Session cleanup
 - **Features**: Session management, protocol negotiation, error handling
 
-#### stdio Transport
+#### 2. stdio Transport
 - **Framework**: FastMCP
 - **Usage**: Direct process communication (Claude Code)
 - **Benefits**: Low latency, simple integration
 
-#### SSE Transport
+#### 3. SSE Transport
 - **Purpose**: Real-time server-to-client updates
 - **Use Cases**: Progress notifications, status updates
 - **Implementation**: HTTP streaming with event resumption
 
-### 2. Agent Orchestrator (`orchestrator/agent_orchestrator.py`)
+#### 4. WebSocket Transport
+- **Purpose**: Real-time bidirectional communication
+- **Use Cases**: Interactive sessions, live updates
 
-#### Multi-Agent System
+### Wand Server Core
+
+#### Wand Server (`wand.py`)
+- Handles protocol communication
+- Routes requests to appropriate handlers
+- Manages sessions and authentication
+
+#### Agent Orchestrator (`orchestrator/agent_orchestrator.py`)
+
+##### Multi-Agent System
 - **Agent Count**: 3 internal agents (configurable)
 - **Tools per Agent**: 23 tools (22 orchestrator + Claude API)
 - **Distribution**: Round-robin task assignment with health monitoring
 - **Failover**: Automatic agent restart on failure
 
-#### Task Management
+##### Task Management
 - **Queue**: Distributed task queue with UUID tracking
 - **Load Balancing**: Agent selection based on availability
 - **Monitoring**: Health checks every 10 seconds
 - **Scaling**: Dynamic agent creation/destruction
 
-### 3. Tool System
+#### Task Manager
+- Tracks task lifecycle
+- Manages execution backends
+- Handles retries and timeouts
 
-#### Available Tools (22 total)
+#### Agent Manager
+- Registers and monitors agents
+- Capability-based routing
+- Health checking
+
+### Integration Layer
+
+55+ integrations organized by category:
+
+#### AI/ML Integrations
+- **Ollama** - Local language model management
+- **OpenAI** - GPT models and API integration
+- **Anthropic** - Claude model integration
+- **Cohere** - Language model services
+- **HuggingFace** - Model hub and transformers
+- **Replicate** - Cloud AI model hosting
+
+#### DevOps Integrations
+- **Docker** - Container management and orchestration
+- **Kubernetes** - Container orchestration platform
+- **Git/GitHub** - Version control and collaboration
+- **Jenkins** - CI/CD automation
+- **Terraform** - Infrastructure as code
+
+#### Communication Integrations
+- **Slack** - Team messaging and notifications
+- **Discord** - Community and bot integration
+- **Telegram** - Bot and messaging automation
+- **Microsoft Teams** - Enterprise communication and webhooks
+- **Email** - SMTP/IMAP email management
+
+#### Enterprise Identity & Security
+- **ServiceNow** - IT Service Management and ITSM workflows
+- **SailPoint** - Identity Security Cloud and governance
+- **Microsoft Entra** - Azure AD identity management
+- **Britive** - Privileged access management (PAM)
+- **Vault** - Secret management and security
+
+#### Cloud Storage
+- **AWS S3** - Object storage and file management
+- **Google Drive** - Cloud file storage and sharing
+- **Dropbox** - File synchronization and sharing
+- **OneDrive** - Microsoft cloud storage
+
+### Tool System
+
+#### Available Tools (22 core tools)
 
 **System Operations:**
 - `execute_command` - Shell command execution
@@ -161,33 +228,33 @@ class ToolInterface:
         pass
 ```
 
-### 4. Execution Backends
+### Execution Backends
 
-#### Native Backend (`tools/execution/base.py`)
+#### 1. Native Backend (`tools/execution/base.py`)
 - **Direct Execution**: Commands run on host system
 - **Security**: Command validation, path restrictions
 - **Performance**: Fastest execution, lowest overhead
 - **Use Case**: Development environments
 
-#### Docker Backend
+#### 2. Docker Backend
 - **Container Execution**: Commands run in isolated containers
 - **Security**: Full process isolation
 - **Configuration**: Custom images, resource limits
 - **Use Case**: Secure execution environments
 
-#### SSH Backend
+#### 3. SSH Backend
 - **Remote Execution**: Commands run on remote systems
 - **Distribution**: Load balancing across multiple hosts
 - **Authentication**: SSH key-based authentication
 - **Use Case**: Distributed computing, specialized environments
 
-#### Host Agent Backend
+#### 4. Host Agent Backend
 - **Privileged Service**: Separate service with elevated permissions
 - **Security**: Request validation, audit logging
 - **Production**: Recommended for production deployments
 - **Communication**: HTTP API between MCP server and host agent
 
-### 5. Security Layer
+### Security Layer
 
 #### Command Validation
 ```python
@@ -235,6 +302,13 @@ Security Check → Command Execution → Result Processing →
 Audit Logging → Response Return
 ```
 
+### Enterprise Integration Flow
+1. **Authentication** → Enterprise credentials validation
+2. **Operation Routing** → Route to specific enterprise service
+3. **API Call** → Execute operation against enterprise system
+4. **Response Processing** → Format and validate response
+5. **Audit Logging** → Log enterprise operations for compliance
+
 ## Configuration Management
 
 ### Environment-Based Configuration
@@ -253,6 +327,18 @@ config = {
         "mode": "native",  # native|docker|ssh|host_agent
         "timeout": 300,
         "security": {...}
+    },
+    "enterprise": {
+        "servicenow": {
+            "instance_url": "https://company.service-now.com",
+            "username": "api_user",
+            "password": "secure_password"
+        },
+        "sailpoint": {
+            "base_url": "https://company.api.identitynow.com",
+            "client_id": "client_id",
+            "client_secret": "client_secret"
+        }
     }
 }
 ```
@@ -290,6 +376,15 @@ config = {
 - **Resource Limits**: Adjust memory/CPU per backend
 - **Connection Limits**: Tune FastAPI worker processes
 - **Database Connections**: Pool management for external services
+
+## Security Features
+
+- **JWT-based authentication** for secure API access
+- **Rate limiting per integration** to prevent abuse
+- **Command validation and sanitization** for safe execution
+- **Comprehensive audit logging** for compliance
+- **Sandboxed execution environments** for isolation
+- **Enterprise SSO integration** via OAuth 2.1
 
 ## Monitoring & Observability
 
@@ -338,3 +433,37 @@ class CustomBackend(ExecutionBackend):
 - **gRPC**: High-performance binary protocol
 - **GraphQL**: Query-based API interface
 - **Custom Protocols**: Domain-specific communication
+
+### Enterprise Integration Extensions
+```python
+class CustomEnterpriseIntegration(BaseIntegration):
+    REQUIRED_CONFIG_KEYS = ["api_url", "token"]
+
+    async def initialize(self):
+        # Initialize enterprise connection
+        pass
+
+    async def _execute_operation_impl(self, operation: str, **kwargs):
+        # Execute enterprise-specific operations
+        return {"result": "success"}
+```
+
+## Production Deployment
+
+### Container Support
+- **Docker**: Full containerization support
+- **Kubernetes**: Orchestration and scaling
+- **Health Checks**: Readiness and liveness probes
+- **Resource Management**: CPU and memory limits
+
+### Load Balancing
+- **Multiple Instances**: Deploy behind load balancer
+- **Session Affinity**: Sticky sessions when needed
+- **Health Monitoring**: Automatic failover
+- **Geographic Distribution**: Multi-region deployment
+
+### Enterprise Integration
+- **Single Sign-On**: SAML/OAuth integration
+- **Network Security**: VPN and firewall support
+- **Compliance**: Audit trails and data governance
+- **High Availability**: Redundancy and disaster recovery

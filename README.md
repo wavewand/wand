@@ -23,11 +23,11 @@ A **spellbinding** Model Context Protocol (MCP) implementation with comprehensiv
 ### 🪄 Comprehensive Integration Arsenal (50+ Integrations)
 - **🎥 Media & Content**: Video, Audio, Images, OCR, QR codes
 - **🤖 AI & ML**: OpenAI, Anthropic, Cohere, Hugging Face, Local models
-- **💬 Communication**: Discord, Telegram, Email, Calendar
+- **💬 Communication**: Discord, Telegram, Microsoft Teams, Email, Calendar
 - **☁️ Cloud & Storage**: Google Drive, S3, Dropbox, OneDrive
 - **🛠️ DevOps**: Docker, Kubernetes, Terraform, Monitoring
 - **💼 Business**: CRM, Payments, Project Management, HR tools
-- **🔐 Security**: Identity, Password management, Vulnerability scanning
+- **🔐 Security & Identity**: Enterprise IAM, ServiceNow, SailPoint, Britive, Vault
 
 ### 🏗️ Enhanced Error Response Architecture
 - **Native Error Preservation**: Complete exception details without abstraction
@@ -43,14 +43,76 @@ A **spellbinding** Model Context Protocol (MCP) implementation with comprehensiv
 
 ## 🚀 Quick Spell Casting
 
+### Prerequisites
+- Python 3.10 or higher (required for MCP support)
+- pip (Python package manager)
+- git
+- Virtual environment support (venv)
+
 ### 1. Setup & Installation
 ```bash
 # Clone and setup
 git clone <repository-url>
 cd wand
+
+# Set up Python virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+```
+
+#### Installation Options
+
+Choose the installation that fits your needs:
+
+**Basic Installation (Recommended)**
+```bash
+# Core server with essential integrations (Slack, GitHub, Docker, AWS)
+pip install -r requirements-base.txt
+```
+
+**Installation with Audio/Multimedia Support**
+```bash
+# Includes PyAudio, OpenCV, Whisper, etc.
+# Note: Requires system audio libraries
+pip install -r requirements-base.txt -r requirements-audio.txt
+```
+
+**Installation with AI/ML Support**
+```bash
+# Includes OpenAI, Anthropic, HuggingFace, etc.
+# Note: Large download size due to PyTorch and transformers
+pip install -r requirements-base.txt -r requirements-ai.txt
+```
+
+**Complete Installation (All Features)**
+```bash
+# Includes everything - all 55+ integrations
+pip install -r requirements-all.txt
+```
+
+**Using pip extras (Alternative)**
+```bash
+# Install from source with optional dependencies
+pip install -e .  # Basic installation
+pip install -e ".[audio]"  # With audio support
+pip install -e ".[ai]"  # With AI/ML support
+pip install -e ".[all]"  # Everything
+```
+
+#### Environment Configuration
+```bash
+# Configure environment variables
+cp .env.example .env
+# Edit .env and configure:
+# - OLLAMA_BASE_URL - Your Ollama server URL (default: http://localhost:11434)
+# - API keys for any integrations you want to use
+# - Database connection string if using PostgreSQL
+
+# Configure Wand
+cp config.sample.json config.json
+# Edit config.json to match your setup. Replace placeholder paths:
+# - {WAND_PATH} - The absolute path to your wand installation
+# - {WORKSPACE_PATH} - Your workspace directory
 ```
 
 ### 2. Add to Claude Desktop (Recommended) 🪄
@@ -89,10 +151,35 @@ claude mcp add wand-http --transport http http://localhost:8001/mcp
 ```
 
 ### 4. Test Your Magic ✨
-After restarting Claude Desktop, test the integration:
+After restarting Claude Desktop, test the installation:
+
+```bash
+# Test imports
+./venv/bin/python -c "from integrations.ai_ml.ollama import OllamaIntegration; print('✓ Installation successful')"
+
+# Start the Wand server
+./venv/bin/python wand.py stdio
+```
+
+Then test the integration:
 - Ask Claude: *"Use Wand to check the system status"*
 - Try: *"Use Wand to list the available integrations"*
 - Or: *"Show me what Wand tools are available"*
+
+#### Troubleshooting Installation
+
+**Module Import Errors**
+- Ensure virtual environment is activated
+- Reinstall requirements: `pip install -r requirements.txt`
+
+**Ollama Connection Issues**
+- Verify Ollama is running: `curl http://localhost:11434/api/tags`
+- Check `OLLAMA_BASE_URL` in your `.env` file
+
+**Claude Desktop Integration**
+- Check logs in the `logs/` directory
+- Ensure paths in Claude configuration are absolute, not relative
+- Restart Claude Desktop after configuration changes
 
 ## ✨ Why the Script Setup is Magical
 
@@ -178,7 +265,7 @@ The working Claude Code configuration (`~/.claude.json`):
 | [🚀 Quick Start](docs/QUICK_START.md) | 5-minute setup guide |
 | [🔌 Claude Code Integration](docs/MCP_CLAUDE_CODE_INTEGRATION.md) | Complete integration guide |
 | [📊 API Spellbook](docs/API_DOCUMENTATION.md) | All 69 magical tools and enchanted endpoints |
-| [🏗️ Architecture](docs/ARCHITECTURE.md) | System design and components |
+| [🏗️ Architecture](docs/ARCHITECTURE.md) | Complete system design and components |
 | [🚀 Deployment](docs/DEPLOYMENT_GUIDE.md) | Production deployment guide |
 | [🎨 Wand UI Integration](docs/MCP_UI_INTEGRATION.md) | Magical dashboard and enchanted management APIs |
 
@@ -210,6 +297,7 @@ The working Claude Code configuration (`~/.claude.json`):
 ### 💬 Communication & Social
 - **Discord** - Bot integration and messaging
 - **Telegram** - Bot and messaging automation
+- **Microsoft Teams** - Webhook messaging and notifications
 - **Email** - SMTP/IMAP email management
 - **Calendar** - Calendar integration and scheduling
 
@@ -260,6 +348,10 @@ The working Claude Code configuration (`~/.claude.json`):
 - **Harvest** - Time tracking and invoicing
 
 ### 🔐 Security & Identity
+- **ServiceNow** - IT Service Management and ITSM
+- **SailPoint** - Identity Security Cloud and governance
+- **Microsoft Entra** - Azure AD identity management
+- **Britive** - Privileged access management (PAM)
 - **Vault** - Secret management
 - **1Password** - Password management
 - **Okta** - Identity and access management
@@ -272,6 +364,40 @@ The working Claude Code configuration (`~/.claude.json`):
 - **Spotify** - Music streaming integration
 - **Podcast** - Podcast management and processing
 - **Steam** - Gaming platform integration
+
+## 🏢 Enterprise Integration Spotlight
+
+Wand now includes comprehensive **enterprise identity management and communication** tools:
+
+### 🔐 Identity & Access Management
+- **`servicenow`** - Create incidents, manage users, query ITSM records
+- **`sailpoint`** - Identity governance, access requests, certification campaigns
+- **`entra`** - Azure AD user/group management, role assignments
+- **`britive`** - Just-in-time privileged access, secret checkout
+
+### 💬 Enterprise Communication
+- **`teams`** - Send messages, cards, and notifications via webhooks
+
+**Example Usage:**
+```python
+# Create ServiceNow incident
+servicenow(operation="create_incident",
+          short_description="Server outage",
+          priority="1")
+
+# Request SailPoint access
+sailpoint(operation="request_access",
+          identity_id="user123",
+          access_profile_ids=["admin_profile"])
+
+# Send Teams notification
+teams(operation="send_notification",
+      title="Deployment Complete",
+      message="v2.1.0 deployed successfully",
+      status="success")
+```
+
+See [Enterprise Integrations Guide](docs/ENTERPRISE_INTEGRATIONS.md) for complete setup and usage documentation.
 
 ## 🪄 Magical Server Modes
 
